@@ -222,8 +222,23 @@
     .studio-hotspot.fixed { border-color:#22c55e; background:rgba(34,197,94,.25); box-shadow:0 0 0 4px rgba(34,197,94,.12); }
     .studio-fix-list { display:grid; gap:7px; }
     .studio-fix-list .option { text-align:left; }
+    .chaos-phone { border:1px solid color-mix(in srgb, var(--accent) 28%, var(--border)); border-radius:18px; background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.025)); padding:12px; box-shadow: inset 0 0 0 1px rgba(255,255,255,.03); }
+    .chaos-screen { min-height:260px; border-radius:13px; background:#0a1020; padding:12px; overflow:hidden; position:relative; }
+    .chaos-screen::before { content:''; position:absolute; inset:0; pointer-events:none; background: radial-gradient(circle at 15% 0%, rgba(139,92,246,.22), transparent 38%), linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px); background-size:auto, 100% 28px; }
+    .chaos-screen > * { position:relative; z-index:1; }
+    .chat-bubble { max-width:88%; padding:9px 10px; border-radius:14px; margin:7px 0; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.08); color:var(--soft); font-size:.78rem; line-height:1.45; }
+    .chat-bubble.alert { margin-left:auto; background:color-mix(in srgb, var(--accent) 18%, rgba(255,255,255,.06)); border-color:color-mix(in srgb, var(--accent) 34%, var(--border)); }
+    .stat-grid { display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:8px; margin:10px 0 12px; }
+    .mini-stat { border:1px solid var(--border); border-radius:10px; padding:8px; background:rgba(255,255,255,.035); }
+    .mini-stat span { display:block; color:var(--muted); font-family:'Space Mono', monospace; font-size:.58rem; text-transform:uppercase; letter-spacing:.08em; margin-bottom:5px; }
+    .mini-stat strong { font-size:1rem; color:var(--text); }
+    .choice-card { border:1px solid color-mix(in srgb, var(--accent) 24%, var(--border)); border-radius:12px; padding:12px; background:rgba(255,255,255,.035); cursor:pointer; text-align:left; transition:.14s; }
+    .choice-card:hover { transform:translateY(-2px); background:color-mix(in srgb, var(--accent) 10%, rgba(255,255,255,.04)); }
+    .choice-card strong { display:block; margin-bottom:5px; }
+    .choice-card span { color:var(--muted); font-family:'Space Mono', monospace; font-size:.68rem; line-height:1.55; }
+    .glitch-title { font-size:1.25rem; font-weight:800; line-height:1.1; text-shadow:2px 0 rgba(239,68,68,.55), -2px 0 rgba(20,184,166,.45); }
     @media (max-width: 840px) { .studio-fake-text { max-width:100%; } .studio-screen { min-height:320px; } }
-    @media (max-width: 840px) { .wow-grid, .shop-actions, .boss-roster, .boss-stage { grid-template-columns:1fr; } .boss-portrait { min-height:130px; } }
+    @media (max-width: 840px) { .wow-grid, .shop-actions, .boss-roster, .boss-stage { grid-template-columns:1fr; } .boss-portrait { min-height:130px; } .stat-grid { grid-template-columns:repeat(2, minmax(0,1fr)); } }
     @media (max-width: 840px) { .zoo-hero { grid-template-columns: 1fr; } }
     @media (max-width: 620px) { header { padding: 40px 0 28px; } .grid { grid-template-columns: 1fr; } .match-grid { grid-template-columns: 1fr; } .modal { max-height: 92vh; } .body { padding: 16px 16px 22px; } }
   </style>
@@ -259,7 +274,7 @@
   <script>
   const DATA = {
     sections: [
-      { title: '🌐 Section A — Modern Technologies', accent: 'purple', ids: ['A1','A2','ACCESSMATCH','ACCESSSTUDIO','SORTCLOUD'] },
+      { title: '🌐 Section A — Modern Technologies', accent: 'purple', ids: ['A1','A2','CLOUDRESCUE','ACCESSMATCH','ACCESSSTUDIO','SORTCLOUD'] },
       { title: '🔐 Section B — Cyber Security', accent: 'red', ids: ['B1','B2','MALZOO','IMPACTCHAIN','B3','PHISH','PASSLAB'] },
       { title: '⚖️ Section C — Wider Implications', accent: 'teal', ids: ['C1','C2','GDPRCOURT','UPGRADESHOP','IPLAB','MATCHLEG'] },
       { title: '📊 Section D — Planning & Communication', accent: 'blue', ids: ['D1','READDIAG','STORYDIAG','TABLEFLOW','ANNOTATE','DIAGGAP'] },
@@ -327,6 +342,7 @@
       },
       ACCESSMATCH: { icon:'♿', code:'A2 · Activity', color:'purple', title:'Accessibility Feature Matcher', desc:'Match user profiles to the feature that helps them most', tools:'🎮 Match profiles · A2 accessibility', special:'accessMatch' },
       ACCESSSTUDIO: { icon:'🎛️', code:'A2 · Activity', color:'purple', title:'Accessibility Studio', desc:'Audit a broken app interface and choose inclusive design fixes', tools:'🎛️ Spot issues · Apply fixes', special:'accessStudio' },
+      CLOUDRESCUE: { icon:'🚨', code:'A1 · Activity', color:'purple', title:'Cloud Rescue: Stop The Meltdown', desc:'Choose the least cooked tech setup before the school trip system collapses', tools:'🚨 Crisis choices · A1 cloud/comms', special:'cloudRescue' },
       MALZOO: { icon:'🦠', code:'B1 · Activity', color:'red', title:'Malware Zoo', desc:'Match each malware type to its behaviour', tools:'🧪 Explore the zoo', special:'malwareZoo' },
       IMPACTCHAIN: { icon:'💥', code:'B1 · Activity', color:'red', title:'Breach Impact Chain', desc:'Link cyber incidents to data loss, downtime, productivity, legal and reputation impacts', tools:'🎮 Trace the impact', special:'impactChain' },
       B1: { icon:'⚠️', code:'B1', color:'red', title:'Threats to Data', desc:'External threats · Internal threats · Impact of breaches', tools:'📚 Learn · ⚡ Quiz · 🎮 Classifier',
@@ -675,8 +691,69 @@
   function finalScore(score,total,resetFn){ return `<div class="scorebox"><div class="emoji">${score===total?'🏆':score/total>=.7?'🎯':'📚'}</div><strong>${score}/${total} correct</strong><p style="color:var(--muted);font-family:Space Mono,monospace;font-size:.78rem;margin-bottom:14px">${score===total?'Perfect!':score/total>=.7?'Strong work.':'Review the notes and try again.'}</p><button class="action primary" onclick="${resetFn()}">Play Again</button></div>`; }
 
   function renderSpecial(type){
-    return ({ sortCloud: renderSortCloud, accessMatch: renderAccessMatch, accessStudio: renderAccessStudio, malwareZoo: renderMalwareZoo, impactChain: renderImpactChain, gdprCourt: renderGDPRCourt, upgradeShop: renderUpgradeShop, ipLab: renderIPLab, storyDiag: renderStoryDiag, tableFlow: renderTableFlow, annotateArena: renderAnnotateArena, phish: renderPhish, passLab: renderPassLab, matchLeg: renderMatchLeg, readDiag: renderReadDiag, diagGap: renderDiagGap, bossBattle: renderBossBattle, speed: renderSpeed, flash: renderFlash, verbs: renderVerbs, exam: renderExam, aos: renderAOS })[type]();
+    return ({ sortCloud: renderSortCloud, cloudRescue: renderCloudRescue, accessMatch: renderAccessMatch, accessStudio: renderAccessStudio, malwareZoo: renderMalwareZoo, impactChain: renderImpactChain, gdprCourt: renderGDPRCourt, upgradeShop: renderUpgradeShop, ipLab: renderIPLab, storyDiag: renderStoryDiag, tableFlow: renderTableFlow, annotateArena: renderAnnotateArena, phish: renderPhish, passLab: renderPassLab, matchLeg: renderMatchLeg, readDiag: renderReadDiag, diagGap: renderDiagGap, bossBattle: renderBossBattle, speed: renderSpeed, flash: renderFlash, verbs: renderVerbs, exam: renderExam, aos: renderAOS })[type]();
   }
+
+  const rescueEvents = [
+    {
+      msg:'Trip payment page is dying on launch day. 300 parents are refreshing at once and the office PC sounds like a kettle.',
+      choices:[
+        ['Scale the cloud server for the spike','Cloud scalability lets resources increase on demand, so the service survives peak traffic without buying permanent hardware.',{uptime:25,secure:8,cost:-10,vibe:8}],
+        ['Ask everyone to try again after lunch','That reduces pressure, but it wrecks availability and user experience when the service should be 24/7.',{uptime:-12,secure:0,cost:4,vibe:-16}],
+        ['Move the form to one local spreadsheet','A local file creates access/version problems and a single point of failure.',{uptime:-18,secure:-10,cost:8,vibe:-12}]
+      ]
+    },
+    {
+      msg:'A teacher is uploading student medical notes from a cafe Wi-Fi because the coach leaves in 20 minutes.',
+      choices:[
+        ['Use a VPN or WPA2-secured hotspot','Open Wi-Fi can expose data in transit; WPA2/VPN reduces interception risk.',{uptime:8,secure:26,cost:-4,vibe:8}],
+        ['Use the cafe Wi-Fi because it has five bars','Signal strength is not security. Open Wi-Fi can allow man-in-the-middle interception.',{uptime:8,secure:-28,cost:4,vibe:-8}],
+        ['Screenshot the data and send it in a group chat','That creates extra copies and shares sensitive data in the wrong channel.',{uptime:5,secure:-24,cost:0,vibe:-12}]
+      ]
+    },
+    {
+      msg:'Three staff edited different copies of the rooming list. Nobody knows which version is the real one.',
+      choices:[
+        ['Use one shared cloud document with version history','A single shared instance avoids duplicate files, while version history helps recover earlier work.',{uptime:18,secure:10,cost:-3,vibe:16}],
+        ['Pick the file with the newest filename','A filename is not reliable version control and may hide overwritten changes.',{uptime:-8,secure:0,cost:4,vibe:-12}],
+        ['Print all versions and manually merge them','Possible, but slow and error-prone compared with synchronised cloud collaboration.',{uptime:-10,secure:2,cost:-4,vibe:-8}]
+      ]
+    },
+    {
+      msg:'The minibus reaches a mobile blackspot. Staff need the allergy list but the signal is gone.',
+      choices:[
+        ['Enable offline access before travel, then sync later','Online/offline working keeps access during outages, but changes must synchronise later.',{uptime:22,secure:6,cost:-2,vibe:12}],
+        ['Assume mobile data will work everywhere','Coverage depends on infrastructure, terrain and blackspots, especially in rural areas.',{uptime:-24,secure:0,cost:2,vibe:-14}],
+        ['Let one person keep the only paper copy','A backup can help, but one copy is fragile and can be lost or outdated.',{uptime:6,secure:-6,cost:4,vibe:-4}]
+      ]
+    }
+  ];
+  const statClamp = n => Math.max(0, Math.min(100, n));
+  const statBlock = stats => `<div class="stat-grid">${Object.entries(stats).map(([k,v])=>`<div class="mini-stat"><span>${k}</span><strong>${v}</strong></div>`).join('')}</div>`;
+  function renderDecisionGame(id, title, sub, events, base, buttonFn, resetFn){
+    const st=ensureAct(id,()=>({i:0, stats:{...base}, fb:null, score:0}));
+    if(st.i>=events.length){
+      const total=Object.values(st.stats).reduce((a,b)=>a+b,0), grade=total>=310?'Elite save':total>=250?'Solid recovery':'Bit cooked';
+      return `<div class="boss-arena"><div class="glitch-title">${title}</div><div class="wow-sub">${grade}. Final systems rating: ${total}/${Object.keys(st.stats).length*100}</div>${statBlock(st.stats)}<button class="action primary" onclick="${resetFn}">Run it back</button></div>`;
+    }
+    const ev=events[st.i];
+    if(st.fb){
+      return `<div class="wow-grid"><div class="chaos-phone"><div class="chaos-screen"><div class="chat-bubble alert">${ev.msg}</div><div class="chat-bubble">${st.fb.choice}</div><div class="feedback show ${st.fb.good?'ok':'no'}" style="display:block">${st.fb.good?'Clean decision.':'That one got messy.'}<br>${st.fb.why}</div></div></div><div>${statBlock(st.stats)}<button class="action primary" onclick="${buttonFn}(-1)">Next crisis →</button><button class="action secondary" style="margin-left:8px" onclick="${resetFn}">Reset</button></div></div>`;
+    }
+    return `<div class="boss-arena"><div class="glitch-title">${title}</div><div class="wow-sub">${sub}</div>${statBlock(st.stats)}</div><div class="chaos-phone"><div class="chaos-screen"><div class="chat-bubble alert">${ev.msg}</div>${ev.choices.map((c,i)=>`<button class="choice-card" onclick="${buttonFn}(${i})"><strong>${c[0]}</strong><span>${c[1]}</span></button>`).join('')}</div></div>`;
+  }
+  function gamePick(id, events, idx){
+    const st=state.activity[id]; if(!st) return;
+    if(idx<0){ st.fb=null; st.i++; renderModal(); return; }
+    const ch=events[st.i].choices[idx];
+    Object.entries(ch[2]).forEach(([k,v])=>st.stats[k]=statClamp((st.stats[k]||50)+v));
+    const good=Object.values(ch[2]).reduce((a,b)=>a+b,0)>0;
+    if(good) st.score++;
+    st.fb={choice:ch[0], why:ch[1], good};
+    renderModal();
+  }
+  function renderCloudRescue(){ return renderDecisionGame('CLOUDRESCUE','🚨 Cloud Rescue','Stop the trip system melting down. Choose fast, but choose smart.',rescueEvents,{uptime:55,secure:55,cost:70,vibe:50},'Hub.cloudRescuePick',"Hub.resetActivity('CLOUDRESCUE')"); }
+  function cloudRescuePick(i){ gamePick('CLOUDRESCUE', rescueEvents, i); }
 
   const accessProfiles = [
     ['Maya is visually impaired and cannot see the images on a revision website.','Alt text','Alt text provides a written description of an image so a screen reader can read it aloud.','🖼️'],
@@ -1978,7 +2055,7 @@
   ];
   function renderAOS(){ return aos.map(a=>`<div class="activity-card"><span class="pill" style="--accent:var(--amber)">${a[0]}</span><h3 style="margin-top:8px;font-size:.95rem">${a[1]}</h3><p style="color:var(--soft);font-size:.84rem;line-height:1.55;margin-top:5px">${a[2]}</p><p style="color:var(--muted);font-family:Space Mono,monospace;font-size:.72rem;margin-top:7px">Tip: ${a[3]}</p></div>`).join(''); }
 
-  window.Hub = { open:openTopic, close:closeModal, tab:switchTab, answerQuiz, resetQuiz, resetActivity, gapSelect, gapPlace, gapCheck, impactAnswer, nextImpact, classify, sequence, scenarioAnswer, nextScenario, specialAnswer, accessAnswer, accessNext, studioSelect, studioFix, studioContinue, malwareZooAnswer, malwareZooNext, impactChainToggle, impactChainClear, impactChainCheck, impactChainNext, courtSelect, courtCheck, courtNext, shopToggle, shopCheck, ipSelect, ipCheck, ipNext, storyAnswer, storyNext, tablePick, tableCheck, tableNext, annoPick, annoCheck, annoNext, phishFlag, phishSubmit, passwordUpdate, linearAnswer, nextLinear, bossBattleStart, bossBattleAnswer, bossBattleContinue, bossBattleMenu, bossBattleReset, startSpeed, setSpeedSection, speedAnswer, restartSpeed, speedMenu, setFlashSection, flipFlash, nextFlash, prevFlash, randomFlash };
+  window.Hub = { open:openTopic, close:closeModal, tab:switchTab, answerQuiz, resetQuiz, resetActivity, gapSelect, gapPlace, gapCheck, impactAnswer, nextImpact, classify, sequence, scenarioAnswer, nextScenario, specialAnswer, cloudRescuePick, accessAnswer, accessNext, studioSelect, studioFix, studioContinue, malwareZooAnswer, malwareZooNext, impactChainToggle, impactChainClear, impactChainCheck, impactChainNext, courtSelect, courtCheck, courtNext, shopToggle, shopCheck, ipSelect, ipCheck, ipNext, storyAnswer, storyNext, tablePick, tableCheck, tableNext, annoPick, annoCheck, annoNext, phishFlag, phishSubmit, passwordUpdate, linearAnswer, nextLinear, bossBattleStart, bossBattleAnswer, bossBattleContinue, bossBattleMenu, bossBattleReset, startSpeed, setSpeedSection, speedAnswer, restartSpeed, speedMenu, setFlashSection, flipFlash, nextFlash, prevFlash, randomFlash };
   $('#overlay').addEventListener('click', e => { if(e.target.id === 'overlay') closeModal(); });
   document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
   load(); renderHome();
