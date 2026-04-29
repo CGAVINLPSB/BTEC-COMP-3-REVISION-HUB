@@ -237,6 +237,16 @@
     .choice-card strong { display:block; margin-bottom:5px; }
     .choice-card span { color:var(--muted); font-family:'Space Mono', monospace; font-size:.68rem; line-height:1.55; }
     .glitch-title { font-size:1.25rem; font-weight:800; line-height:1.1; text-shadow:2px 0 rgba(239,68,68,.55), -2px 0 rgba(20,184,166,.45); }
+    .video-frame { position:relative; aspect-ratio:16/9; border-radius:12px; overflow:hidden; border:1px solid color-mix(in srgb, var(--accent) 34%, var(--border)); background:#050509; margin-bottom:12px; }
+    .video-frame iframe { position:absolute; inset:0; width:100%; height:100%; border:0; }
+    .video-play { position:absolute; inset:0; width:100%; height:100%; border:0; cursor:pointer; color:white; background:#050509; overflow:hidden; text-align:left; }
+    .video-play img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.62; filter:saturate(1.15); transition:.16s; }
+    .video-play:hover img { opacity:.76; transform:scale(1.02); }
+    .video-play-icon { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); display:grid; place-items:center; width:82px; height:58px; border-radius:18px; background:#ff0033; box-shadow:0 18px 55px rgba(0,0,0,.55); font-size:30px; }
+    .video-play-title { position:absolute; left:16px; right:16px; bottom:14px; text-shadow:0 2px 8px #000; font-weight:800; font-size:.94rem; line-height:1.25; }
+    .video-list { display:grid; gap:7px; max-height:290px; overflow:auto; padding-right:4px; }
+    .video-list .option { display:block; width:100%; }
+    .video-list .option.active { border-color:var(--accent); background:color-mix(in srgb, var(--accent) 18%, rgba(255,255,255,.04)); }
     @media (max-width: 840px) { .studio-fake-text { max-width:100%; } .studio-screen { min-height:320px; } }
     @media (max-width: 840px) { .wow-grid, .shop-actions, .boss-roster, .boss-stage { grid-template-columns:1fr; } .boss-portrait { min-height:130px; } .stat-grid { grid-template-columns:repeat(2, minmax(0,1fr)); } }
     @media (max-width: 840px) { .zoo-hero { grid-template-columns: 1fr; } }
@@ -274,10 +284,10 @@
   <script>
   const DATA = {
     sections: [
-      { title: '🌐 Section A — Modern Technologies', accent: 'purple', ids: ['A1','A2','CLOUDRESCUE','ACCESSMATCH','ACCESSSTUDIO','SORTCLOUD'] },
-      { title: '🔐 Section B — Cyber Security', accent: 'red', ids: ['B1','B2','MALZOO','IMPACTCHAIN','B3','PHISH','PASSLAB'] },
-      { title: '⚖️ Section C — Wider Implications', accent: 'teal', ids: ['C1','C2','GDPRCOURT','UPGRADESHOP','IPLAB','MATCHLEG'] },
-      { title: '📊 Section D — Planning & Communication', accent: 'blue', ids: ['D1','READDIAG','STORYDIAG','TABLEFLOW','ANNOTATE','DIAGGAP'] },
+      { title: '🌐 Section A — Modern Technologies', accent: 'purple', ids: ['A1','A2','CLOUDRESCUE','ACCESSMATCH','ACCESSSTUDIO','SORTCLOUD','VIDA'] },
+      { title: '🔐 Section B — Cyber Security', accent: 'red', ids: ['B1','B2','MALZOO','IMPACTCHAIN','B3','PHISH','PASSLAB','VIDB'] },
+      { title: '⚖️ Section C — Wider Implications', accent: 'teal', ids: ['C1','C2','GDPRCOURT','UPGRADESHOP','IPLAB','MATCHLEG','VIDC'] },
+      { title: '📊 Section D — Planning & Communication', accent: 'blue', ids: ['D1','READDIAG','STORYDIAG','TABLEFLOW','ANNOTATE','DIAGGAP','VIDD'] },
       { title: '🛠️ Revision Tools', accent: 'amber', ids: ['BOSS','SPEED','FLASH','VERBS','EXAM','AOS'] }
     ],
     topics: {
@@ -343,6 +353,7 @@
       ACCESSMATCH: { icon:'♿', code:'A2 · Activity', color:'purple', title:'Accessibility Feature Matcher', desc:'Match user profiles to the feature that helps them most', tools:'🎮 Match profiles · A2 accessibility', special:'accessMatch' },
       ACCESSSTUDIO: { icon:'🎛️', code:'A2 · Activity', color:'purple', title:'Accessibility Studio', desc:'Audit a broken app interface and choose inclusive design fixes', tools:'🎛️ Spot issues · Apply fixes', special:'accessStudio' },
       CLOUDRESCUE: { icon:'🚨', code:'A1 · Activity', color:'purple', title:'Cloud Rescue: Stop The Meltdown', desc:'Choose the least cooked tech setup before the school trip system collapses', tools:'🚨 Crisis choices · A1 cloud/comms', special:'cloudRescue' },
+      VIDA: { icon:'▶️', code:'Section A', color:'purple', title:'Section A Video Vault', desc:'MrBrownCS videos for modern technologies', tools:'▶️ Watch playlist picks', special:'videoA' },
       MALZOO: { icon:'🦠', code:'B1 · Activity', color:'red', title:'Malware Zoo', desc:'Match each malware type to its behaviour', tools:'🧪 Explore the zoo', special:'malwareZoo' },
       IMPACTCHAIN: { icon:'💥', code:'B1 · Activity', color:'red', title:'Breach Impact Chain', desc:'Link cyber incidents to data loss, downtime, productivity, legal and reputation impacts', tools:'🎮 Trace the impact', special:'impactChain' },
       B1: { icon:'⚠️', code:'B1', color:'red', title:'Threats to Data', desc:'External threats · Internal threats · Impact of breaches', tools:'📚 Learn · ⚡ Quiz · 🎮 Classifier',
@@ -526,9 +537,12 @@
       SORTCLOUD: { icon:'☁️', code:'A1', color:'purple', title:'Sort the Cloud', desc:'Sort cloud statements as advantages or risks', tools:'🎮 Open activity', special:'sortCloud' },
       PHISH: { icon:'🎣', code:'B1 · Activity', color:'red', title:'Spot the Phishing Email', desc:'Find red flags hiding in plain sight', tools:'🎮 Open activity', special:'phish' },
       PASSLAB: { icon:'🔑', code:'B2/B3 · Activity', color:'red', title:'Password Policy Lab', desc:'Build a policy-compliant password', tools:'🎮 Open activity', special:'passLab' },
+      VIDB: { icon:'▶️', code:'Section B', color:'red', title:'Section B Video Vault', desc:'MrBrownCS videos for cyber security', tools:'▶️ Watch playlist picks', special:'videoB' },
       MATCHLEG: { icon:'📜', code:'C2', color:'teal', title:'Match the Legislation', desc:'Match scenarios to UK GDPR, Computer Misuse Act or Copyright Law', tools:'🎮 Open activity', special:'matchLeg' },
+      VIDC: { icon:'▶️', code:'Section C', color:'teal', title:'Section C Video Vault', desc:'MrBrownCS videos for wider implications', tools:'▶️ Watch playlist picks', special:'videoC' },
       READDIAG: { icon:'🔍', code:'D1 · Activity', color:'blue', title:'Read the Diagram', desc:'Answer questions from an information flow diagram', tools:'🔍 Open activity', special:'readDiag' },
       DIAGGAP: { icon:'📝', code:'D1 · Activity', color:'blue', title:'Decode the Diagram', desc:'Fill blanks that map to a matching diagram', tools:'📝 Open activity', special:'diagGap' },
+      VIDD: { icon:'▶️', code:'Section D', color:'blue', title:'Section D Video Vault', desc:'MrBrownCS videos for planning and communication', tools:'▶️ Watch playlist picks', special:'videoD' },
       BOSS: { icon:'👑', code:'Arcade', color:'amber', title:'Boss Battle', desc:'Fight syllabus bosses with combo damage and exam explanations', tools:'👑 Enter arena', special:'bossBattle' },
       SPEED: { icon:'⚡', code:'All Topics', color:'amber', title:'Speed Round', desc:'Random quick-fire questions from every topic', tools:'⚡ Start speed round', special:'speed' },
       FLASH: { icon:'🃏', code:'All Topics', color:'amber', title:'Key Terms Flashcards', desc:'Essential terms — click to flip', tools:'Open flashcards', special:'flash' },
@@ -691,7 +705,7 @@
   function finalScore(score,total,resetFn){ return `<div class="scorebox"><div class="emoji">${score===total?'🏆':score/total>=.7?'🎯':'📚'}</div><strong>${score}/${total} correct</strong><p style="color:var(--muted);font-family:Space Mono,monospace;font-size:.78rem;margin-bottom:14px">${score===total?'Perfect!':score/total>=.7?'Strong work.':'Review the notes and try again.'}</p><button class="action primary" onclick="${resetFn()}">Play Again</button></div>`; }
 
   function renderSpecial(type){
-    return ({ sortCloud: renderSortCloud, cloudRescue: renderCloudRescue, accessMatch: renderAccessMatch, accessStudio: renderAccessStudio, malwareZoo: renderMalwareZoo, impactChain: renderImpactChain, gdprCourt: renderGDPRCourt, upgradeShop: renderUpgradeShop, ipLab: renderIPLab, storyDiag: renderStoryDiag, tableFlow: renderTableFlow, annotateArena: renderAnnotateArena, phish: renderPhish, passLab: renderPassLab, matchLeg: renderMatchLeg, readDiag: renderReadDiag, diagGap: renderDiagGap, bossBattle: renderBossBattle, speed: renderSpeed, flash: renderFlash, verbs: renderVerbs, exam: renderExam, aos: renderAOS })[type]();
+    return ({ sortCloud: renderSortCloud, cloudRescue: renderCloudRescue, videoA:()=>renderVideoVault('A'), videoB:()=>renderVideoVault('B'), videoC:()=>renderVideoVault('C'), videoD:()=>renderVideoVault('D'), accessMatch: renderAccessMatch, accessStudio: renderAccessStudio, malwareZoo: renderMalwareZoo, impactChain: renderImpactChain, gdprCourt: renderGDPRCourt, upgradeShop: renderUpgradeShop, ipLab: renderIPLab, storyDiag: renderStoryDiag, tableFlow: renderTableFlow, annotateArena: renderAnnotateArena, phish: renderPhish, passLab: renderPassLab, matchLeg: renderMatchLeg, readDiag: renderReadDiag, diagGap: renderDiagGap, bossBattle: renderBossBattle, speed: renderSpeed, flash: renderFlash, verbs: renderVerbs, exam: renderExam, aos: renderAOS })[type]();
   }
 
   const rescueEvents = [
@@ -754,6 +768,47 @@
   }
   function renderCloudRescue(){ return renderDecisionGame('CLOUDRESCUE','🚨 Cloud Rescue','Stop the trip system melting down. Choose fast, but choose smart.',rescueEvents,{uptime:55,secure:55,cost:70,vibe:50},'Hub.cloudRescuePick',"Hub.resetActivity('CLOUDRESCUE')"); }
   function cloudRescuePick(i){ gamePick('CLOUDRESCUE', rescueEvents, i); }
+
+  const videoVaults = {
+    A: { title:'Section A Video Vault', note:'Modern technologies: networks, cloud, teams, communication and impacts.', videos:[
+      ['0jHh80IfmdU','Ad Hoc Networks'],['07r7nPeNDm0','Tethering and Personal Hotspots'],['eG9mc8xSYvw','Open Wi-Fi Networks'],['pu2nM1FF1Mg','Issues Affecting Network Availability'],['4C4qaEhitEo','Features, Pros and Cons of Cloud Storage'],['aU-03mTnXto','What is Cloud Computing?'],['PryWbki0tZs','Factors to Consider When Choosing Cloud Providers'],['mMsR8zKElVA','How Modern Technology Has Changed Modern Teams'],['pEDTcdHG6ko','Digital Tools for Managing Modern Teams'],['OyZCkbwzy2A','Using Platforms to Communicate with Stakeholders'],['E4PPFBUTB9g','Public and Private Communication Channels'],['KjAeeuWF1P0','How Technology can Support Inclusivity & Accessibility'],['E8YqojAUDhM','Positives & Negatives of Modern Technology on Organisations'],['4YwbYICAIsg','Positives & Negatives of Modern Technology on Individuals']
+    ]},
+    B: { title:'Section B Video Vault', note:'Cyber security: threats, controls, policies, backups and recovery.', videos:[
+      ['nkwDSFEM25g','Cyber Threats and Why Cyber Attacks Happen'],['m7VHXLF1Ur4','Hacking and the Different Hats'],['LtBR_ZpCYxc','Viruses, Worms, and Trojans'],['6hj853H-wNU','Rootkits, Ransomware, and Spyware'],['tifTN315SVI','Denial of Service Attacks'],['FELlAixpnTs','Bots and Botnets'],['sRjwwNJ-8oA','Social Engineering: Phishing, Pharming, and Shoulder Surfing'],['FXLWSg1S5LM','Man-In-The-Middle Attacks'],['LOcx2uZLNdg','Common Internal Cyber Threats to Organisations'],['1iarckogEBM','Impacts of Cyber Security Breaches'],['P15EdxEg6Ic','Physical Security Measures & Biometrics'],['fwqX7pu7-6g','Logical User Access Restrictions'],['dWB-v5oixqM','Data-Level Protection & Device Hardening Techniques'],['CeTATgOp3eE','Firewalls'],['BZlPgMsKvY0','Encryption'],['kDSR2qJBo70','Ethical Hacking and Penetration Testing'],['WkmEWcjkDbA','What are Cyber Security Policies?'],['7e1KX1_aSwI','Password Policies'],['Y9KO2hPo8Ns','Contents of Acceptable Use Policies'],['REWhp_P1Cf4','Device Hardening Parameters'],['v9p6IsQw9rg','Backup Policies'],['Sst6zaz8z84','Disaster Recovery Policies'],['-kEWj1M2ABo','Responding to a Cyber Attack']
+    ]},
+    C: { title:'Section C Video Vault', note:'Wider implications: shared data, environment, access, law and IP.', videos:[
+      ['uKwtT_i-Ayk','Responsible Use of Shared Data'],['UyXNvqnqM3E','Environmental Impacts of Computing'],['kK4IUVC6V5M','Providing Equal Access to Services & Information'],['kjPvD38XXUY','Uses of Social Media - Organisations & Individuals'],['eN-v_G_zMm0','Data Protection Principles'],['aYXTuDB1J_M','Intellectual Property: Copyright, Trademarks, and Patents'],['_zwwFjAOg6g','Criminal Use of Computer Systems']
+    ]},
+    D: { title:'Section D Video Vault', note:'Planning and communication: notation, flowcharts, data flows and system diagrams.', videos:[
+      ['Bb2GZcFHtQo','Different Forms of Notation'],['kUt0nS0yMtM','Flowcharts'],['eTJUyQMEnJw','Data and Information Flow Diagrams'],['RGRSD_md3_8','System Diagrams']
+    ]}
+  };
+  function youtubeEmbedUrl(vid){
+    return `https://www.youtube.com/embed/${vid}?autoplay=1&rel=0&modestbranding=1&playsinline=1`;
+  }
+  function youtubeThumb(vid){
+    return `https://i.ytimg.com/vi/${vid}/hqdefault.jpg`;
+  }
+  function playVideo(vid){
+    const frame=$('#videoPlayer');
+    const play=$('#videoPlay');
+    if(!frame) return;
+    frame.src=youtubeEmbedUrl(vid);
+    frame.hidden=false;
+    if(play) play.hidden=true;
+  }
+  function renderVideoVault(section){
+    const vault=videoVaults[section], id='VIDEO'+section;
+    const st=ensureAct(id,()=>({i:0}));
+    if(!vault) return '<div class="info">No videos found for this section yet.</div>';
+    if(!Number.isInteger(st.i) || st.i<0 || st.i>=vault.videos.length) st.i=0;
+    const [vid,title]=vault.videos[st.i];
+    return `<div class="wow-panel"><div class="wow-title">▶️ ${vault.title}</div><div class="wow-sub">${vault.note}</div></div>
+      <div class="video-frame"><button id="videoPlay" class="video-play" type="button" onclick="Hub.playVideo('${vid}')" aria-label="Play ${esc(title)}"><img src="${youtubeThumb(vid)}" alt=""><span class="video-play-icon">▶</span><span class="video-play-title">${esc(title)}</span></button><iframe id="videoPlayer" hidden title="${esc(title)}" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" allowfullscreen></iframe></div>
+      <div class="row" style="margin-bottom:12px"><a class="action primary" style="text-decoration:none" href="https://www.youtube.com/watch?v=${vid}&list=PL04uZ7242_M5C7q2Xry39ZSe3hOb3etQQ" target="_blank" rel="noopener">Open on YouTube ↗</a><span class="boss-chip">If school filtering blocks the embed, this button still works.</span></div>
+      <div class="video-list">${vault.videos.map((v,i)=>`<button class="option ${i===st.i?'active':''}" onclick="Hub.videoVaultPick('${section}',${i})"><strong>${String(i+1).padStart(2,'0')}.</strong> ${v[1]}</button>`).join('')}</div>`;
+  }
+  function videoVaultPick(section,i){ const st=ensureAct('VIDEO'+section,()=>({i:0})); st.i=i; renderModal(); }
 
   const accessProfiles = [
     ['Maya is visually impaired and cannot see the images on a revision website.','Alt text','Alt text provides a written description of an image so a screen reader can read it aloud.','🖼️'],
@@ -2055,7 +2110,7 @@
   ];
   function renderAOS(){ return aos.map(a=>`<div class="activity-card"><span class="pill" style="--accent:var(--amber)">${a[0]}</span><h3 style="margin-top:8px;font-size:.95rem">${a[1]}</h3><p style="color:var(--soft);font-size:.84rem;line-height:1.55;margin-top:5px">${a[2]}</p><p style="color:var(--muted);font-family:Space Mono,monospace;font-size:.72rem;margin-top:7px">Tip: ${a[3]}</p></div>`).join(''); }
 
-  window.Hub = { open:openTopic, close:closeModal, tab:switchTab, answerQuiz, resetQuiz, resetActivity, gapSelect, gapPlace, gapCheck, impactAnswer, nextImpact, classify, sequence, scenarioAnswer, nextScenario, specialAnswer, cloudRescuePick, accessAnswer, accessNext, studioSelect, studioFix, studioContinue, malwareZooAnswer, malwareZooNext, impactChainToggle, impactChainClear, impactChainCheck, impactChainNext, courtSelect, courtCheck, courtNext, shopToggle, shopCheck, ipSelect, ipCheck, ipNext, storyAnswer, storyNext, tablePick, tableCheck, tableNext, annoPick, annoCheck, annoNext, phishFlag, phishSubmit, passwordUpdate, linearAnswer, nextLinear, bossBattleStart, bossBattleAnswer, bossBattleContinue, bossBattleMenu, bossBattleReset, startSpeed, setSpeedSection, speedAnswer, restartSpeed, speedMenu, setFlashSection, flipFlash, nextFlash, prevFlash, randomFlash };
+  window.Hub = { open:openTopic, close:closeModal, tab:switchTab, answerQuiz, resetQuiz, resetActivity, gapSelect, gapPlace, gapCheck, impactAnswer, nextImpact, classify, sequence, scenarioAnswer, nextScenario, specialAnswer, cloudRescuePick, videoVaultPick, playVideo, accessAnswer, accessNext, studioSelect, studioFix, studioContinue, malwareZooAnswer, malwareZooNext, impactChainToggle, impactChainClear, impactChainCheck, impactChainNext, courtSelect, courtCheck, courtNext, shopToggle, shopCheck, ipSelect, ipCheck, ipNext, storyAnswer, storyNext, tablePick, tableCheck, tableNext, annoPick, annoCheck, annoNext, phishFlag, phishSubmit, passwordUpdate, linearAnswer, nextLinear, bossBattleStart, bossBattleAnswer, bossBattleContinue, bossBattleMenu, bossBattleReset, startSpeed, setSpeedSection, speedAnswer, restartSpeed, speedMenu, setFlashSection, flipFlash, nextFlash, prevFlash, randomFlash };
   $('#overlay').addEventListener('click', e => { if(e.target.id === 'overlay') closeModal(); });
   document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
   load(); renderHome();
