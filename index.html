@@ -35,8 +35,19 @@
     .stat { min-width: 82px; }
     .stat strong { display: block; color: var(--purple); font-size: 1.9rem; line-height: 1; }
     .stat span { display: block; color: var(--muted); font-family: 'Space Mono', monospace; font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; margin-top: 4px; }
+    .coin-pop { position: fixed; z-index: 250; left: var(--x); top: var(--y); pointer-events: none; color:#fde68a; background:rgba(245,158,11,.16); border:1px solid rgba(245,158,11,.55); border-radius:999px; padding:6px 10px; font-family:'Space Mono', monospace; font-size:.7rem; font-weight:700; box-shadow:0 10px 28px rgba(245,158,11,.22); animation:coinFly .9s ease-out forwards; }
+    @keyframes coinFly { 0% { transform:translate(-50%, 8px) scale(.86); opacity:0; } 18% { opacity:1; } 100% { transform:translate(-50%, -42px) scale(1.08); opacity:0; } }
     .section-title { display: flex; align-items: center; gap: 12px; margin: 38px 0 15px; color: var(--muted); font-family: 'Space Mono', monospace; font-size: .64rem; letter-spacing: .18em; text-transform: uppercase; }
     .section-title::after { content: ''; height: 1px; flex: 1; background: var(--border); }
+    .home-section { position:relative; margin:28px -10px 0; padding:10px; border-radius:16px; overflow:hidden; }
+    .home-section::before { content:''; position:absolute; inset:0; pointer-events:none; opacity:.42; background:var(--theme-bg); background-size:var(--theme-size, 52px 52px); animation:themeDrift 18s linear infinite; mask-image:linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); }
+    .home-section > * { position:relative; z-index:1; }
+    .home-section.purple { --theme-bg: radial-gradient(circle at 20px 18px, rgba(139,92,246,.22) 0 2px, transparent 3px), linear-gradient(90deg, rgba(139,92,246,.12) 1px, transparent 1px), linear-gradient(rgba(139,92,246,.08) 1px, transparent 1px); --theme-size: 54px 54px; }
+    .home-section.red { --theme-bg: repeating-linear-gradient(0deg, rgba(239,68,68,.12) 0 1px, transparent 1px 9px), linear-gradient(90deg, transparent 0 35%, rgba(239,68,68,.14) 35% 36%, transparent 36%); --theme-size: 60px 42px; }
+    .home-section.teal { --theme-bg: linear-gradient(135deg, transparent 0 40%, rgba(20,184,166,.14) 40% 42%, transparent 42%), radial-gradient(circle at 34px 20px, rgba(20,184,166,.16) 0 3px, transparent 4px); --theme-size: 70px 50px; }
+    .home-section.blue { --theme-bg: linear-gradient(rgba(59,130,246,.12) 1px, transparent 1px), linear-gradient(90deg, rgba(59,130,246,.12) 1px, transparent 1px), radial-gradient(circle at 26px 26px, rgba(59,130,246,.16) 0 4px, transparent 5px); --theme-size: 42px 42px; }
+    .home-section.amber { --theme-bg: repeating-linear-gradient(135deg, rgba(245,158,11,.14) 0 6px, transparent 6px 18px), radial-gradient(circle at 24px 24px, rgba(245,158,11,.16) 0 4px, transparent 5px); --theme-size: 64px 64px; }
+    @keyframes themeDrift { from { background-position:0 0; } to { background-position:120px 80px; } }
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(245px, 1fr)); gap: 13px; }
     .card { position: relative; overflow: hidden; background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 18px 17px 15px; min-height: 145px; cursor: pointer; transition: transform .18s, border-color .18s, box-shadow .18s, background .18s; display: flex; flex-direction: column; gap: 8px; }
     .card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--accent); }
@@ -244,11 +255,36 @@
     .video-play:hover img { opacity:.76; transform:scale(1.02); }
     .video-play-icon { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); display:grid; place-items:center; width:82px; height:58px; border-radius:18px; background:#ff0033; box-shadow:0 18px 55px rgba(0,0,0,.55); font-size:30px; }
     .video-play-title { position:absolute; left:16px; right:16px; bottom:14px; text-shadow:0 2px 8px #000; font-weight:800; font-size:.94rem; line-height:1.25; }
+    .loot-balance { display:flex; align-items:center; justify-content:space-between; gap:12px; border:1px solid color-mix(in srgb, var(--amber) 36%, var(--border)); background:linear-gradient(135deg, rgba(245,158,11,.16), rgba(255,255,255,.035)); border-radius:12px; padding:12px 14px; margin-bottom:14px; }
+    .loot-balance strong { font-size:1.2rem; color:#fde68a; }
+    .pack-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin-bottom:14px; }
+    .pack-card { border:1px solid color-mix(in srgb, var(--pack) 42%, var(--border)); border-radius:12px; padding:14px; background:radial-gradient(circle at 22% 16%, color-mix(in srgb, var(--pack) 28%, transparent), transparent 34%), rgba(255,255,255,.035); text-align:left; }
+    .pack-card h4 { margin:8px 0 5px; font-size:1rem; }
+    .pack-card p { color:var(--muted); font-size:.75rem; line-height:1.5; margin-bottom:10px; }
+    .pack-art { height:86px; border-radius:10px; border:1px solid color-mix(in srgb, var(--pack) 38%, var(--border)); display:grid; place-items:center; font-size:2.3rem; background:repeating-linear-gradient(135deg, rgba(255,255,255,.06) 0 8px, transparent 8px 16px), color-mix(in srgb, var(--pack) 12%, #050509); box-shadow:inset 0 0 35px color-mix(in srgb, var(--pack) 18%, transparent); }
+    .drop-reveal { border:1px solid color-mix(in srgb, var(--rarity) 50%, var(--border)); background:linear-gradient(135deg, color-mix(in srgb, var(--rarity) 18%, transparent), rgba(255,255,255,.035)); border-radius:12px; padding:12px; margin-bottom:14px; animation:pop .28s ease-out; }
+    .speed-stage { position:relative; border-radius:14px; padding:14px; border:1px solid color-mix(in srgb, var(--accent) 28%, var(--border)); background:linear-gradient(135deg, rgba(255,255,255,.04), rgba(255,255,255,.018)); overflow:hidden; }
+    .speed-stage.hit { animation:speedHit .36s ease-out; }
+    .speed-stage.miss { animation:speedMiss .36s ease-out; }
+    .speed-feedback { display:flex; justify-content:space-between; align-items:center; gap:10px; margin:12px 0; padding:10px 12px; border-radius:10px; border:1px solid color-mix(in srgb, var(--speed) 45%, var(--border)); background:color-mix(in srgb, var(--speed) 13%, rgba(255,255,255,.035)); color:var(--speed); font-family:'Space Mono', monospace; font-size:.72rem; animation:pop .2s ease-out; }
+    .speed-feedback strong { font-family:'Syne', system-ui, sans-serif; font-size:1rem; }
+    .speed-combo { color:#fde68a; text-shadow:0 0 18px rgba(245,158,11,.32); }
+    @keyframes speedHit { 0% { box-shadow:0 0 0 rgba(34,197,94,0); } 35% { box-shadow:0 0 45px rgba(34,197,94,.3); transform:scale(1.01); } 100% { box-shadow:0 0 0 rgba(34,197,94,0); transform:scale(1); } }
+    @keyframes speedMiss { 0%,100% { transform:translateX(0); } 20% { transform:translateX(-5px); } 45% { transform:translateX(5px); } 70% { transform:translateX(-3px); } }
+    .binder-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+    .revision-card { --rarity:#94a3b8; position:relative; min-height:150px; border:1px solid color-mix(in srgb, var(--rarity) 50%, var(--border)); border-radius:12px; padding:12px; overflow:hidden; background:radial-gradient(circle at 18% 12%, color-mix(in srgb, var(--rarity) 30%, transparent), transparent 35%), linear-gradient(135deg, rgba(255,255,255,.055), rgba(255,255,255,.02)); }
+    .revision-card::after { content:''; position:absolute; inset:auto -24px -30px auto; width:110px; height:110px; border-radius:50%; background:color-mix(in srgb, var(--rarity) 18%, transparent); filter:blur(1px); }
+    .revision-card .rarity { display:inline-block; color:var(--rarity); border:1px solid color-mix(in srgb, var(--rarity) 45%, transparent); border-radius:999px; padding:3px 7px; font-family:'Space Mono',monospace; font-size:.58rem; text-transform:uppercase; letter-spacing:.08em; }
+    .revision-card h4 { margin:10px 0 6px; font-size:.95rem; }
+    .revision-card p { color:var(--soft); font-size:.78rem; line-height:1.5; margin-bottom:8px; }
+    .revision-card .card-icon { position:absolute; right:12px; top:12px; font-size:1.8rem; }
+    .revision-card .dupes { color:var(--muted); font-family:'Space Mono',monospace; font-size:.62rem; }
+    @keyframes pop { from { transform:scale(.96); opacity:.2; } to { transform:scale(1); opacity:1; } }
     .video-list { display:grid; gap:7px; max-height:290px; overflow:auto; padding-right:4px; }
     .video-list .option { display:block; width:100%; }
     .video-list .option.active { border-color:var(--accent); background:color-mix(in srgb, var(--accent) 18%, rgba(255,255,255,.04)); }
     @media (max-width: 840px) { .studio-fake-text { max-width:100%; } .studio-screen { min-height:320px; } }
-    @media (max-width: 840px) { .wow-grid, .shop-actions, .boss-roster, .boss-stage { grid-template-columns:1fr; } .boss-portrait { min-height:130px; } .stat-grid { grid-template-columns:repeat(2, minmax(0,1fr)); } }
+    @media (max-width: 840px) { .wow-grid, .shop-actions, .boss-roster, .boss-stage, .pack-grid, .binder-grid { grid-template-columns:1fr; } .boss-portrait { min-height:130px; } .stat-grid { grid-template-columns:repeat(2, minmax(0,1fr)); } }
     @media (max-width: 840px) { .zoo-hero { grid-template-columns: 1fr; } }
     @media (max-width: 620px) { header { padding: 40px 0 28px; } .grid { grid-template-columns: 1fr; } .match-grid { grid-template-columns: 1fr; } .modal { max-height: 92vh; } .body { padding: 16px 16px 22px; } }
   </style>
@@ -288,7 +324,7 @@
       { title: '🔐 Section B — Cyber Security', accent: 'red', ids: ['B1','B2','MALZOO','IMPACTCHAIN','B3','PHISH','PASSLAB','VIDB'] },
       { title: '⚖️ Section C — Wider Implications', accent: 'teal', ids: ['C1','C2','GDPRCOURT','UPGRADESHOP','IPLAB','MATCHLEG','VIDC'] },
       { title: '📊 Section D — Planning & Communication', accent: 'blue', ids: ['D1','READDIAG','STORYDIAG','TABLEFLOW','ANNOTATE','DIAGGAP','VIDD'] },
-      { title: '🛠️ Revision Tools', accent: 'amber', ids: ['BOSS','SPEED','FLASH','VERBS','EXAM','AOS'] }
+      { title: '🛠️ Revision Tools', accent: 'amber', ids: ['STORE','COLLECTION','BOSS','SPEED','FLASH','VERBS','EXAM','AOS'] }
     ],
     topics: {
       A1: { icon:'🌐', code:'A1', color:'purple', title:'Modern Technologies', desc:'Cloud storage · Cloud computing · Ad hoc networks', tools:'📚 Learn · ⚡ Quiz · 🎮 Gap Fill',
@@ -543,6 +579,8 @@
       READDIAG: { icon:'🔍', code:'D1 · Activity', color:'blue', title:'Read the Diagram', desc:'Answer questions from an information flow diagram', tools:'🔍 Open activity', special:'readDiag' },
       DIAGGAP: { icon:'📝', code:'D1 · Activity', color:'blue', title:'Decode the Diagram', desc:'Fill blanks that map to a matching diagram', tools:'📝 Open activity', special:'diagGap' },
       VIDD: { icon:'▶️', code:'Section D', color:'blue', title:'Section D Video Vault', desc:'MrBrownCS videos for planning and communication', tools:'▶️ Watch playlist picks', special:'videoD' },
+      STORE: { icon:'💰', code:'Coins', color:'amber', title:'Loot Drop Store', desc:'Spend earned coins on rarity packs and revision cards', tools:'Open store', special:'lootStore' },
+      COLLECTION: { icon:'🃏', code:'Binder', color:'amber', title:'Drop Collection', desc:'View every revision card you have pulled so far', tools:'Open binder', special:'lootCollection' },
       BOSS: { icon:'👑', code:'Arcade', color:'amber', title:'Boss Battle', desc:'Fight syllabus bosses with combo damage and exam explanations', tools:'👑 Enter arena', special:'bossBattle' },
       SPEED: { icon:'⚡', code:'All Topics', color:'amber', title:'Speed Round', desc:'Random quick-fire questions from every topic', tools:'⚡ Start speed round', special:'speed' },
       FLASH: { icon:'🃏', code:'All Topics', color:'amber', title:'Key Terms Flashcards', desc:'Essential terms — click to flip', tools:'Open flashcards', special:'flash' },
@@ -554,7 +592,7 @@
 
   const COLORS = { purple:'var(--purple)', red:'var(--red)', teal:'var(--teal)', blue:'var(--blue)', amber:'var(--amber)' };
   const LS = 'btec-dit-c3-clean-progress-v1';
-  const state = { current:null, tab:'learn', quiz:{}, activity:{}, flashIndex:0, flashFlip:false, flashSection:'all', speed:null, speedSection:'all', timer:null };
+  const state = { current:null, tab:'learn', quiz:{}, activity:{}, economy:null, flashIndex:0, flashFlip:false, flashSection:'all', speed:null, speedSection:'all', timer:null };
   const $ = (s, root=document) => root.querySelector(s);
   const $$ = (s, root=document) => [...root.querySelectorAll(s)];
   const shuffle = arr => arr.map(v => [Math.random(), v]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]);
@@ -563,21 +601,58 @@
   const attrJs = v => esc(js(v));
   const topicList = () => Object.values(DATA.topics);
   const quizTopics = () => Object.entries(DATA.topics).filter(([,t]) => t.quiz);
-  function save(){ try { localStorage.setItem(LS, JSON.stringify({ quiz: state.quiz, activity: state.activity })); } catch {} }
-  function load(){ try { const data = JSON.parse(localStorage.getItem(LS) || '{}'); Object.assign(state.quiz, data.quiz || {}); Object.assign(state.activity, data.activity || {}); } catch {} }
+  const economySeed = () => ({ coins:0, earned:{}, collection:[], lastDrop:null, lastEarn:null });
+  function economy(){ state.economy ||= economySeed(); state.economy.earned ||= {}; state.economy.collection ||= []; return state.economy; }
+  function addCoins(amount, key, label){
+    const eco=economy();
+    if(key && eco.earned[key]) return 0;
+    if(key) eco.earned[key]=true;
+    eco.coins += amount;
+    eco.lastEarn={amount,label};
+    renderStats();
+    showCoinPop(amount);
+    return amount;
+  }
+  function showCoinPop(amount){
+    const target=$('#stats .stat strong');
+    if(!target || !amount) return;
+    const r=target.getBoundingClientRect();
+    const pop=document.createElement('div');
+    pop.className='coin-pop';
+    pop.textContent=`+${amount} coins`;
+    pop.style.setProperty('--x', `${r.left + r.width/2}px`);
+    pop.style.setProperty('--y', `${r.top}px`);
+    document.body.appendChild(pop);
+    setTimeout(()=>pop.remove(), 950);
+  }
+  function awardActivity(score,total){
+    const id=state.current;
+    if(!id || id==='STORE' || id==='COLLECTION') return 0;
+    const title=DATA.topics[id]?.title || id;
+    return addCoins(12 + Math.max(0, score)*3 + (score===total?8:0), `activity:${id}`, `${title} complete`);
+  }
+  function save(){ try { localStorage.setItem(LS, JSON.stringify({ quiz: state.quiz, activity: state.activity, economy: economy() })); } catch {} }
+  function load(){ try { const data = JSON.parse(localStorage.getItem(LS) || '{}'); Object.assign(state.quiz, data.quiz || {}); Object.assign(state.activity, data.activity || {}); state.economy = Object.assign(economySeed(), data.economy || {}); state.economy.earned ||= {}; state.economy.collection ||= []; } catch { state.economy = economySeed(); } }
 
+  function renderStats(){
+    const qCount = quizTopics().reduce((n, [,t]) => n + t.quiz.length, 0);
+    const activities = topicList().filter(t => t.activity || t.special).length;
+    const eco = economy();
+    const statsEl=$('#stats');
+    if(!statsEl) return;
+    statsEl.innerHTML = [
+      [eco.coins,'Coins'], [eco.collection.length,'Drops'], [qCount,'Quiz Qs'], [activities,'Activities']
+    ].map(([n,l]) => `<div class="stat"><strong>${n}</strong><span>${l}</span></div>`).join('');
+  }
   function renderHome(){
     const app = $('#app');
     app.innerHTML = DATA.sections.map(sec => `
-      <div class="section-title">${sec.title}</div>
-      <div class="grid">${sec.ids.map(id => card(DATA.topics[id])).join('')}</div>
+      <section class="home-section ${sec.accent}" style="--accent:${COLORS[sec.accent]}">
+        <div class="section-title">${sec.title}</div>
+        <div class="grid">${sec.ids.map(id => card(DATA.topics[id])).join('')}</div>
+      </section>
     `).join('');
-    const qCount = quizTopics().reduce((n, [,t]) => n + t.quiz.length, 0);
-    const activities = topicList().filter(t => t.activity || t.special).length;
-    const flashcards = flashcardsData.length;
-    $('#stats').innerHTML = [
-      [topicList().length,'Cards'], [qCount,'Quiz Qs'], [activities,'Activities'], [flashcards,'Flashcards']
-    ].map(([n,l]) => `<div class="stat"><strong>${n}</strong><span>${l}</span></div>`).join('');
+    renderStats();
   }
   function card(t){
     return `<article class="card" style="--accent:${COLORS[t.color]}" onclick="Hub.open('${Object.keys(DATA.topics).find(k=>DATA.topics[k]===t)}')">
@@ -631,7 +706,13 @@
         }).join('')}</div><div class="feedback ${done?'show':''} ${done && chosen===correct?'ok':'no'}">${done ? (chosen===correct ? '✓ Correct! ' : '✗ Not quite. ') + q[3] : ''}</div></div>`;
     }).join('') + quizSummary(id, t);
   }
-  function answerQuiz(id, qi, oi){ state.quiz[id] ||= {}; state.quiz[id][qi] = oi; renderModal(); }
+  function answerQuiz(id, qi, oi){
+    state.quiz[id] ||= {};
+    const firstTry = state.quiz[id][qi] === undefined;
+    state.quiz[id][qi] = oi;
+    if(firstTry && DATA.topics[id]?.quiz?.[qi]?.[2] === oi) addCoins(5, `quiz:${id}:${qi}`, 'Correct quiz answer');
+    renderModal();
+  }
   function quizSummary(id,t){
     const qs = state.quiz[id] || {}; const done = Object.keys(qs).length; if (!done) return '';
     const score = t.quiz.reduce((n,q,i)=> n + (qs[i] === q[2] ? 1 : 0), 0);
@@ -703,10 +784,13 @@
   function scenarioAnswer(id,opt){ const st=state.activity[id], item=DATA.topics[id].activity.items[st.i]; const ok=opt===item[1]; if(ok) st.score++; st.fb={ok}; renderModal(); }
   function nextScenario(id){ const st=state.activity[id]; st.i++; st.fb=null; renderModal(); }
   function resetActivity(id){ delete state.activity[id]; renderModal(); }
-  function finalScore(score,total,resetFn){ return `<div class="scorebox"><div class="emoji">${score===total?'🏆':score/total>=.7?'🎯':'📚'}</div><strong>${score}/${total} correct</strong><p style="color:var(--muted);font-family:Space Mono,monospace;font-size:.78rem;margin-bottom:14px">${score===total?'Perfect!':score/total>=.7?'Strong work.':'Review the notes and try again.'}</p><button class="action primary" onclick="${resetFn()}">Play Again</button></div>`; }
+  function finalScore(score,total,resetFn){
+    const earned = awardActivity(score,total);
+    return `<div class="scorebox"><div class="emoji">${score===total?'🏆':score/total>=.7?'🎯':'📚'}</div><strong>${score}/${total} correct</strong>${earned?`<p style="color:#fde68a;font-family:Space Mono,monospace;font-size:.78rem;margin-top:8px">+${earned} coins earned</p>`:`<p style="color:var(--muted);font-family:Space Mono,monospace;font-size:.72rem;margin-top:8px">Coins for this activity already claimed.</p>`}<p style="color:var(--muted);font-family:Space Mono,monospace;font-size:.78rem;margin-bottom:14px">${score===total?'Perfect!':score/total>=.7?'Strong work.':'Review the notes and try again.'}</p><button class="action primary" onclick="${resetFn()}">Play Again</button></div>`;
+  }
 
   function renderSpecial(type){
-    return ({ sortCloud: renderSortCloud, cloudRescue: renderCloudRescue, videoA:()=>renderVideoVault('A'), videoB:()=>renderVideoVault('B'), videoC:()=>renderVideoVault('C'), videoD:()=>renderVideoVault('D'), accessMatch: renderAccessMatch, accessStudio: renderAccessStudio, malwareZoo: renderMalwareZoo, impactChain: renderImpactChain, gdprCourt: renderGDPRCourt, upgradeShop: renderUpgradeShop, ipLab: renderIPLab, storyDiag: renderStoryDiag, tableFlow: renderTableFlow, annotateArena: renderAnnotateArena, phish: renderPhish, passLab: renderPassLab, matchLeg: renderMatchLeg, readDiag: renderReadDiag, diagGap: renderDiagGap, bossBattle: renderBossBattle, speed: renderSpeed, flash: renderFlash, verbs: renderVerbs, exam: renderExam, aos: renderAOS })[type]();
+    return ({ lootStore: renderLootStore, lootCollection: renderLootCollection, sortCloud: renderSortCloud, cloudRescue: renderCloudRescue, videoA:()=>renderVideoVault('A'), videoB:()=>renderVideoVault('B'), videoC:()=>renderVideoVault('C'), videoD:()=>renderVideoVault('D'), accessMatch: renderAccessMatch, accessStudio: renderAccessStudio, malwareZoo: renderMalwareZoo, impactChain: renderImpactChain, gdprCourt: renderGDPRCourt, upgradeShop: renderUpgradeShop, ipLab: renderIPLab, storyDiag: renderStoryDiag, tableFlow: renderTableFlow, annotateArena: renderAnnotateArena, phish: renderPhish, passLab: renderPassLab, matchLeg: renderMatchLeg, readDiag: renderReadDiag, diagGap: renderDiagGap, bossBattle: renderBossBattle, speed: renderSpeed, flash: renderFlash, verbs: renderVerbs, exam: renderExam, aos: renderAOS })[type]();
   }
 
   const rescueEvents = [
@@ -745,17 +829,25 @@
   ];
   const statClamp = n => Math.max(0, Math.min(100, n));
   const statBlock = stats => `<div class="stat-grid">${Object.entries(stats).map(([k,v])=>`<div class="mini-stat"><span>${k}</span><strong>${v}</strong></div>`).join('')}</div>`;
+  function eventOrder(st, ev){
+    st.choiceOrder ||= {};
+    const key=String(st.i);
+    if(!Array.isArray(st.choiceOrder[key]) || st.choiceOrder[key].length!==ev.choices.length) st.choiceOrder[key]=shuffle([...ev.choices.keys()]);
+    return st.choiceOrder[key];
+  }
   function renderDecisionGame(id, title, sub, events, base, buttonFn, resetFn){
-    const st=ensureAct(id,()=>({i:0, stats:{...base}, fb:null, score:0}));
+    const st=ensureAct(id,()=>({i:0, stats:{...base}, fb:null, score:0, choiceOrder:{}}));
     if(st.i>=events.length){
       const total=Object.values(st.stats).reduce((a,b)=>a+b,0), grade=total>=310?'Elite save':total>=250?'Solid recovery':'Bit cooked';
-      return `<div class="boss-arena"><div class="glitch-title">${title}</div><div class="wow-sub">${grade}. Final systems rating: ${total}/${Object.keys(st.stats).length*100}</div>${statBlock(st.stats)}<button class="action primary" onclick="${resetFn}">Run it back</button></div>`;
+      const earned=awardActivity(st.score, events.length);
+      return `<div class="boss-arena"><div class="glitch-title">${title}</div><div class="wow-sub">${grade}. Final systems rating: ${total}/${Object.keys(st.stats).length*100}</div>${earned?`<div class="info" style="color:#fde68a">+${earned} coins earned</div>`:`<div class="info">Coins for this activity already claimed.</div>`}${statBlock(st.stats)}<button class="action primary" onclick="${resetFn}">Run it back</button></div>`;
     }
     const ev=events[st.i];
+    const order=eventOrder(st, ev);
     if(st.fb){
       return `<div class="wow-grid"><div class="chaos-phone"><div class="chaos-screen"><div class="chat-bubble alert">${ev.msg}</div><div class="chat-bubble">${st.fb.choice}</div><div class="feedback show ${st.fb.good?'ok':'no'}" style="display:block">${st.fb.good?'Clean decision.':'That one got messy.'}<br>${st.fb.why}</div></div></div><div>${statBlock(st.stats)}<button class="action primary" onclick="${buttonFn}(-1)">Next crisis →</button><button class="action secondary" style="margin-left:8px" onclick="${resetFn}">Reset</button></div></div>`;
     }
-    return `<div class="boss-arena"><div class="glitch-title">${title}</div><div class="wow-sub">${sub}</div>${statBlock(st.stats)}</div><div class="chaos-phone"><div class="chaos-screen"><div class="chat-bubble alert">${ev.msg}</div>${ev.choices.map((c,i)=>`<button class="choice-card" onclick="${buttonFn}(${i})"><strong>${c[0]}</strong><span>${c[1]}</span></button>`).join('')}</div></div>`;
+    return `<div class="boss-arena"><div class="glitch-title">${title}</div><div class="wow-sub">${sub}</div>${statBlock(st.stats)}</div><div class="chaos-phone"><div class="chaos-screen"><div class="chat-bubble alert">${ev.msg}</div>${order.map(choiceIndex=>{ const c=ev.choices[choiceIndex]; return `<button class="choice-card" onclick="${buttonFn}(${choiceIndex})"><strong>${c[0]}</strong><span>${c[1]}</span></button>`; }).join('')}</div></div>`;
   }
   function gamePick(id, events, idx){
     const st=state.activity[id]; if(!st) return;
@@ -1377,7 +1469,7 @@
     </div>`:''}`;
   }
   function shopToggle(id){ const st=state.activity.UPGRADESHOP; if(!st) return; st.checked=false; st.selected=st.selected||[]; st.selected=st.selected.includes(id)?st.selected.filter(x=>x!==id):[...st.selected,id]; renderModal(); }
-  function shopCheck(){ const st=state.activity.UPGRADESHOP; if(!st) return; st.checked=true; renderModal(); }
+  function shopCheck(){ const st=state.activity.UPGRADESHOP; if(!st) return; st.checked=true; addCoins(22, 'activity:UPGRADESHOP', 'Ethical Upgrade Shop complete'); renderModal(); }
 
   const ipAssets = [
     {title:'Hero photo from Google Images', desc:'A high-quality photo found online with no licence or creator details.', icon:'📷', answer:'Do not use', choices:['Use freely','Use with attribution','Buy/check licence','Do not use'], feedback:'Images online are usually protected by copyright. No visible permission means do not use it.'},
@@ -1418,13 +1510,25 @@
   ];
   function flag(id, html){ const st=ensureAct('PHISH',()=>({found:[],submitted:false})); const found=st.found.includes(id), missed=st.submitted&&!found; return `<span class="flag ${found?'found':missed?'missed':''}" onclick="Hub.phishFlag('${id}')">${html}</span>`; }
   function renderPhish(){ const st=ensureAct('PHISH',()=>({found:[],submitted:false})); return `<div class="info">Click suspicious elements in the email, then submit.</div><div class="email"><div class="email-head"><div class="email-row"><span class="email-label">From</span>${flag('f1','security-team@hmrc-verify-account.co.uk')}</div><div class="email-row"><span class="email-label">Subject</span><strong>${flag('f2','URGENT: Your HMRC account requires immediate action')}</strong></div></div><div class="email-body"><p>${flag('f3','Dear Valued Customer,')}</p><p>${flag('f2','Your account will be deleted within 24 HOURS')} unless you verify immediately.</p><p>${flag('f4','Please confirm your NI number, current password and date of birth.')}</p><p>${flag('f5','<span style="color:#60a5fa;text-decoration:underline">Verify My HMRC Account Now</span><br><span style="font-family:Space Mono,monospace;color:var(--muted);font-size:.66rem">https://hmrc-secure-verify.co.uk/login</span>')}</p><p>Attachment: ${flag('f6','HMRC_Verification_Form_2026.exe')}</p></div></div>${renderFlagFeedback(st)}<div class="row"><button class="action primary" ${!st.found.length?'disabled style="opacity:.5"':''} onclick="Hub.phishSubmit()">Submit</button><button class="action secondary" onclick="Hub.resetActivity('PHISH')">Reset</button></div>`; }
-  function renderFlagFeedback(st){ if(!st.found.length && !st.submitted) return ''; return flags.map(f=>{ const found=st.found.includes(f[0]), missed=st.submitted&&!found; if(!found&&!missed) return ''; return `<div class="feedback show ${found?'ok':'no'}"><strong>${found?'Found':'Missed'}: ${f[1]}</strong><br>${f[2]}</div>`; }).join('') + (st.submitted?`<div class="feedback show ${st.found.length===flags.length?'ok':'no'}">Score: ${st.found.length}/${flags.length}</div>`:''); }
+  function renderFlagFeedback(st){ if(!st.found.length && !st.submitted) return ''; return flags.map(f=>{ const found=st.found.includes(f[0]), missed=st.submitted&&!found; if(!found&&!missed) return ''; return `<div class="feedback show ${found?'ok':'no'}"><strong>${found?'Found':'Missed'}: ${f[1]}</strong><br>${f[2]}</div>`; }).join('') + (st.submitted?`<div class="feedback show ${st.found.length===flags.length?'ok':'no'}">Score: ${st.found.length}/${flags.length}${st.coinEarned?`<br>+${st.coinEarned} coins earned`:''}</div>`:''); }
   function phishFlag(id){ const st=state.activity.PHISH; if(st.submitted) return; if(!st.found.includes(id)) st.found.push(id); renderModal(); }
-  function phishSubmit(){ state.activity.PHISH.submitted = true; renderModal(); }
+  function phishSubmit(){ const st=state.activity.PHISH; st.submitted = true; st.coinEarned = addCoins(10 + st.found.length*3, 'activity:PHISH', 'Phishing email complete'); renderModal(); }
 
   function renderPassLab(){ return `<div class="info">Type a password and watch the policy checklist react live. This is a teaching estimate, not a real cracking calculator.</div><input class="password" id="pw" type="text" placeholder="Start typing..." autocomplete="off" oninput="Hub.passwordUpdate()"><div class="meter"><div id="pwMeter"></div></div><div id="pwText" style="font-family:Space Mono,monospace;color:var(--muted);font-size:.75rem">Start typing to see strength.</div><div class="checklist">${['At least 12 characters','Contains uppercase letters','Contains lowercase letters','Contains numbers','Contains special characters','No common words or repeated patterns'].map((x,i)=>`<div class="check" id="check${i}">▷ ${x}</div>`).join('')}</div><div id="pwDone"></div>`; }
-  function passwordUpdate(){ const v=$('#pw').value, lo=v.toLowerCase(); const common=['password','qwerty','letmein','welcome','admin','123456']; const checks=[v.length>=12,/[A-Z]/.test(v),/[a-z]/.test(v),/[0-9]/.test(v),/[^A-Za-z0-9]/.test(v),v&&!common.some(w=>lo.includes(w))&&!/(.)\1{3}/.test(v)]; const passed=checks.filter(Boolean).length; checks.forEach((ok,i)=>{ const el=$('#check'+i); el.classList.toggle('pass',ok); el.textContent=(ok?'✓ ':'▷ ')+el.textContent.replace(/^[✓▷] /,''); }); const pct=Math.round(passed/6*100); $('#pwMeter').style.width=pct+'%'; $('#pwMeter').style.background=pct<40?'var(--red)':pct<70?'var(--amber)':'var(--green)'; $('#pwText').textContent = v ? `Policy score: ${passed}/6` : 'Start typing to see strength.'; $('#pwDone').innerHTML = passed===6 ? '<div class="feedback show ok">🎉 Policy compliant!</div>' : ''; }
-
+  function passwordUpdate(){
+    const v=$('#pw').value, lo=v.toLowerCase();
+    const common=['password','qwerty','letmein','welcome','admin','123456'];
+    const checks=[v.length>=12,/[A-Z]/.test(v),/[a-z]/.test(v),/[0-9]/.test(v),/[^A-Za-z0-9]/.test(v),v&&!common.some(w=>lo.includes(w))&&!/(.)\1{3}/.test(v)];
+    const passed=checks.filter(Boolean).length;
+    checks.forEach((ok,i)=>{ const el=$('#check'+i); el.classList.toggle('pass',ok); el.textContent=(ok?'✓ ':'▷ ')+el.textContent.replace(/^[✓▷] /,''); });
+    const pct=Math.round(passed/6*100);
+    $('#pwMeter').style.width=pct+'%';
+    $('#pwMeter').style.background=pct<40?'var(--red)':pct<70?'var(--amber)':'var(--green)';
+    $('#pwText').textContent = v ? `Policy score: ${passed}/6` : 'Start typing to see strength.';
+    const earned=passed===6 ? addCoins(18, 'activity:PASSLAB', 'Password Policy Lab complete') : 0;
+    $('#pwDone').innerHTML = passed===6 ? `<div class="feedback show ok">Policy compliant! ${earned?`+${earned} coins earned`:'Coins already claimed.'}</div>` : '';
+    save(); renderHome();
+  }
 
   const storyDiagCases = [
     {
@@ -1820,28 +1924,32 @@
       </div>`;
     }
     const st=state.speed;
-    if(st.done) return finalScore(st.score, st.questions.length, ()=>'Hub.restartSpeed()') + `<div class="row" style="justify-content:center;margin-top:12px"><button class="action secondary" onclick="Hub.speedMenu()">Change mode / section</button></div>`;
+    if(st.done) return finalScore(st.score, st.questions.length, ()=>'Hub.restartSpeed()') + `<div class="activity-card" style="text-align:center"><strong class="speed-combo">Best streak: ${st.bestStreak||0}</strong></div><div class="row" style="justify-content:center;margin-top:12px"><button class="action secondary" onclick="Hub.speedMenu()">Change mode / section</button></div>`;
     const q=st.questions[st.i];
     const timed=!st.timeless;
     const pct=Math.max(0, Math.round((1-st.t/120)*100));
+    const fb=st.fb, combo=st.streak||0;
     return `<div class="info">${timed?'12 seconds per question. Wrong or slow = no point.':'Timer-less practice mode. Take your time — wrong answers still score 0.'}</div>
       <div style="display:flex;justify-content:space-between;font-family:Space Mono,monospace;font-size:.7rem;color:var(--muted);margin-bottom:8px">
-        <span>Q${st.i+1}/${st.questions.length} · ${SECTION_LABELS[st.section]||'All sections'}</span><span>${timed?'⏱️ Timed':'🌿 Timer-less'} · ⭐ ${st.score}</span>
+        <span>Q${st.i+1}/${st.questions.length} · ${SECTION_LABELS[st.section]||'All sections'}</span><span>${timed?'⏱️ Timed':'🌿 Timer-less'} · ⭐ ${st.score} ${combo>1?`· x${combo} streak`:''}</span>
       </div>
       ${timed?`<div class="progress"><div id="speedBar" style="width:${pct}%;background:${pct>60?'var(--green)':pct>30?'var(--amber)':'var(--red)'}"></div></div>`:`<div class="progress"><div style="width:${Math.round((st.i/st.questions.length)*100)}%;background:var(--green)"></div></div>`}
-      <div class="question">${q.q}</div>
-      <div class="options">${q.opts.map((o,i)=>`<button class="option" onclick="Hub.speedAnswer(${i})">${String.fromCharCode(65+i)}. ${o}</button>`).join('')}</div>
-      <div class="row" style="margin-top:12px"><button class="action secondary" onclick="Hub.speedMenu()">Change mode / section</button></div>`;
+      <div class="speed-stage ${fb?fb.ok?'hit':'miss':''}">
+        <div class="question">${q.q}</div>
+        ${fb?`<div class="speed-feedback" style="--speed:${fb.ok?'#22c55e':'#ef4444'}"><strong>${fb.ok?'Correct':'Missed'}</strong><span>${fb.ok?`+1 point ${combo>1?`· ${combo} streak`:''}`:`Answer: ${q.opts[q.ans]}`}</span></div>`:''}
+        <div class="options">${q.opts.map((o,i)=>{ const cls=fb?(i===q.ans?'correct':i===fb.choice?'wrong':'') : ''; return `<button class="option ${cls}" ${fb?'disabled':''} onclick="Hub.speedAnswer(${i})">${String.fromCharCode(65+i)}. ${o}</button>`; }).join('')}</div>
+      </div>
+      <div class="row" style="margin-top:12px"><span class="boss-chip">${combo>2?`🔥 ${combo} answer streak`:'Beat the clock, build the streak.'}</span><button class="action secondary" onclick="Hub.speedMenu()">Change mode / section</button></div>`;
   }
   function setSpeedSection(section){ state.speedSection = section; renderModal(); }
   function startSpeed(timeless=false, section='all'){
     const qs = speedQuestions(section);
-    state.speed={i:0,score:0,questions:qs,t:0,done:false,timeless:!!timeless,section};
+    state.speed={i:0,score:0,questions:qs,t:0,done:false,timeless:!!timeless,section,streak:0,bestStreak:0,fb:null};
     if(state.timer) clearInterval(state.timer);
     state.timer=null;
     if(!timeless){
       state.timer=setInterval(()=>{
-        if(!state.speed||state.speed.done||state.speed.timeless) return;
+        if(!state.speed||state.speed.done||state.speed.timeless||state.speed.fb) return;
         state.speed.t++;
         const bar=$('#speedBar');
         if(bar){
@@ -1849,18 +1957,28 @@
           bar.style.width=pct+'%';
           bar.style.background=pct>60?'var(--green)':pct>30?'var(--amber)':'var(--red)';
         }
-        if(state.speed.t>=120) speedNext(false);
+        if(state.speed.t>=120) speedNext(false, null);
       },100);
     }
     renderModal();
   }
-  function speedAnswer(i){ const st=state.speed; if(!st || st.done) return; const ok=i===st.questions[st.i].ans; speedNext(ok); }
-  function speedNext(ok){
+  function speedAnswer(i){ const st=state.speed; if(!st || st.done || st.fb) return; const ok=i===st.questions[st.i].ans; speedNext(ok,i); }
+  function speedNext(ok, choice=null){
     const st=state.speed;
-    if(!st) return;
+    if(!st || st.done || st.fb) return;
     if(ok) st.score++;
+    st.streak=ok?(st.streak||0)+1:0;
+    st.bestStreak=Math.max(st.bestStreak||0, st.streak||0);
+    st.fb={ok, choice};
+    renderModal();
+    setTimeout(()=>advanceSpeed(), ok?520:760);
+  }
+  function advanceSpeed(){
+    const st=state.speed;
+    if(!st || st.done || !st.fb) return;
     st.i++;
     st.t=0;
+    st.fb=null;
     if(st.i>=st.questions.length){
       st.done=true;
       if(state.timer) clearInterval(state.timer);
@@ -2111,7 +2229,104 @@
   ];
   function renderAOS(){ return aos.map(a=>`<div class="activity-card"><span class="pill" style="--accent:var(--amber)">${a[0]}</span><h3 style="margin-top:8px;font-size:.95rem">${a[1]}</h3><p style="color:var(--soft);font-size:.84rem;line-height:1.55;margin-top:5px">${a[2]}</p><p style="color:var(--muted);font-family:Space Mono,monospace;font-size:.72rem;margin-top:7px">Tip: ${a[3]}</p></div>`).join(''); }
 
-  window.Hub = { open:openTopic, close:closeModal, tab:switchTab, answerQuiz, resetQuiz, resetActivity, gapSelect, gapPlace, gapCheck, impactAnswer, nextImpact, classify, sequence, scenarioAnswer, nextScenario, specialAnswer, cloudRescuePick, videoVaultPick, playVideo, accessAnswer, accessNext, studioSelect, studioFix, studioContinue, malwareZooAnswer, malwareZooNext, impactChainToggle, impactChainClear, impactChainCheck, impactChainNext, courtSelect, courtCheck, courtNext, shopToggle, shopCheck, ipSelect, ipCheck, ipNext, storyAnswer, storyNext, tablePick, tableCheck, tableNext, annoPick, annoCheck, annoNext, phishFlag, phishSubmit, passwordUpdate, linearAnswer, nextLinear, bossBattleStart, bossBattleAnswer, bossBattleContinue, bossBattleMenu, bossBattleReset, startSpeed, setSpeedSection, speedAnswer, restartSpeed, speedMenu, setFlashSection, flipFlash, nextFlash, prevFlash, randomFlash };
+  const rarityMeta = {
+    common:{label:'Common', color:'#94a3b8'},
+    uncommon:{label:'Uncommon', color:'#22c55e'},
+    rare:{label:'Rare', color:'#38bdf8'},
+    epic:{label:'Epic', color:'#a78bfa'},
+    legendary:{label:'Legendary', color:'#f59e0b'}
+  };
+  const lootPacks = {
+    snack:{name:'Snack Pack', cost:25, icon:'PACK', style:'#22c55e', desc:'Cheap hit. Mostly common, but good for building the binder.', count:1, weights:{common:70,uncommon:24,rare:5,epic:1,legendary:0}},
+    glitch:{name:'Glitch Crate', cost:70, icon:'CRATE', style:'#38bdf8', desc:'Two cards, stronger rare chance, feels like opening a mystery box.', count:2, weights:{common:38,uncommon:35,rare:20,epic:6,legendary:1}},
+    boss:{name:'Boss Chest', cost:150, icon:'BOSS', style:'#f59e0b', desc:'Three premium drops. No commons. Built for flexing after a grind.', count:3, weights:{common:0,uncommon:38,rare:34,epic:20,legendary:8}}
+  };
+  const revisionLoot = [
+    {id:'cloud-sync', rarity:'common', icon:'CLOUD', title:'Sync Sprite', section:'A', power:'Reminds you: one cloud file beats ten mystery copies.', tip:'Use synchronisation/version history when explaining cloud collaboration.'},
+    {id:'open-wifi', rarity:'common', icon:'WIFI', title:'Open Wi-Fi Warning', section:'A', power:'Spots sketchy networks before passwords get cooked.', tip:'Open Wi-Fi can enable interception, especially without VPN/HTTPS.'},
+    {id:'kanban', rarity:'common', icon:'TASK', title:'Kanban Card', section:'A', power:'Turns messy team work into columns you can actually read.', tip:'Kanban boards show work moving through stages.'},
+    {id:'backup', rarity:'common', icon:'SAVE', title:'Backup Buddy', section:'B', power:'Lives for the phrase off-site backup.', tip:'Backups need frequency, media/location and restore plans.'},
+    {id:'flow-oval', rarity:'common', icon:'OVAL', title:'Oval Starter', section:'D', power:'Starts and ends arguments politely.', tip:'Flowchart ovals show start/end.'},
+    {id:'hotspot', rarity:'common', icon:'HOT', title:'Hotspot Hitchhiker', section:'A', power:'Turns a phone into emergency internet.', tip:'Tethering shares a mobile data connection using Wi-Fi or Bluetooth.'},
+    {id:'calendar', rarity:'common', icon:'CAL', title:'Shared Calendar Ping', section:'A', power:'Stops world teams booking meetings at cursed times.', tip:'Shared calendars help coordinate remote teams across locations.'},
+    {id:'virus', rarity:'common', icon:'BUG', title:'Virus Tag-Along', section:'B', power:'Needs a host file before causing trouble.', tip:'A virus attaches to files or programs and spreads when they run.'},
+    {id:'cookie', rarity:'common', icon:'CKIE', title:'Cookie Crumb', section:'C', power:'Remembers baskets, sessions and suspiciously specific adverts.', tip:'Cookies store small bits of website data in the browser.'},
+    {id:'flow-process', rarity:'common', icon:'PROC', title:'Process Rectangle', section:'D', power:'Does the boring work so diagrams make sense.', tip:'Flowchart rectangles show actions or calculations.'},
+    {id:'table-title', rarity:'common', icon:'TBL', title:'Table Title Tag', section:'D', power:'Makes numbers less mysterious.', tip:'Clear tables need headings, units, labels and source where relevant.'},
+    {id:'alt-text', rarity:'uncommon', icon:'ALT', title:'Alt Text Angel', section:'A', power:'Makes images speak to screen readers.', tip:'Alt text describes images for users who cannot see them.'},
+    {id:'firewall', rarity:'uncommon', icon:'WALL', title:'Firewall Bouncer', section:'B', power:'Checks packets at the door.', tip:'Firewalls filter traffic using rules such as ports and addresses.'},
+    {id:'phish', rarity:'uncommon', icon:'HOOK', title:'Phish Sniffer', section:'B', power:'Side-eyes fake emails instantly.', tip:'Look for urgency, suspicious links, spoofed sender and requests for data.'},
+    {id:'gdpr-purpose', rarity:'uncommon', icon:'GDPR', title:'Purpose Limiter', section:'C', power:'Stops data being reused for random nonsense.', tip:'Purpose limitation means use data only for the stated reason.'},
+    {id:'dfd-store', rarity:'uncommon', icon:'DATA', title:'Data Store Vault', section:'D', power:'Holds data without pretending to be a process.', tip:'DFD data stores are files/databases, not actions.'},
+    {id:'vpn', rarity:'uncommon', icon:'VPN', title:'VPN Cloak', section:'A', power:'Makes cafe Wi-Fi slightly less terrifying.', tip:'A VPN can encrypt traffic on insecure networks.'},
+    {id:'access-rights', rarity:'uncommon', icon:'KEY', title:'Access Rights Key', section:'A', power:'Lets the right people edit, and everyone else behave.', tip:'Cloud access rights control view, edit and sharing permissions.'},
+    {id:'worm', rarity:'uncommon', icon:'WORM', title:'Worm Sprint', section:'B', power:'Copies itself through networks at horrible speed.', tip:'A worm self-replicates without needing a host file.'},
+    {id:'biometric', rarity:'uncommon', icon:'FACE', title:'Biometric Faceplate', section:'B', power:'You cannot forget your fingerprint in your PE kit.', tip:'Biometrics use physical characteristics like fingerprint, face or iris.'},
+    {id:'copyright', rarity:'uncommon', icon:'COPY', title:'Copyright Stamp', section:'C', power:'Stops random Google Images chaos.', tip:'Copyright protects original creative work such as images, music and text.'},
+    {id:'entity', rarity:'uncommon', icon:'ENT', title:'External Entity Badge', section:'D', power:'Lives outside the system but still sends data in.', tip:'In a DFD, external entities are people, organisations or systems outside the system.'},
+    {id:'mfa', rarity:'rare', icon:'2FA', title:'Two-Factor Titan', section:'B', power:'Password plus proof. Annoying, but powerful.', tip:'2FA combines different factor types: know, have or are.'},
+    {id:'ransomware', rarity:'rare', icon:'LOCK', title:'Ransomware Revenant', section:'B', power:'A reminder to never skip recovery planning.', tip:'Ransomware can cause downtime, data loss, costs and reputational damage.'},
+    {id:'data-min', rarity:'rare', icon:'MIN', title:'Data Minimiser', section:'C', power:'Collects only what is needed. Nothing extra.', tip:'Data minimisation means personal data should be adequate, relevant and limited.'},
+    {id:'system-map', rarity:'rare', icon:'MAP', title:'System Diagram Cartographer', section:'D', power:'Connects inputs, processes, outputs and storage.', tip:'System diagrams show components and connections in a system.'},
+    {id:'uptime', rarity:'rare', icon:'24/7', title:'Availability Aura', section:'A', power:'The system stays awake when everyone else gives up.', tip:'Cloud services can improve availability when internet and provider uptime are reliable.'},
+    {id:'screenreader', rarity:'rare', icon:'READ', title:'Screen Reader Oracle', section:'A', power:'Reads the interface like a narrator with receipts.', tip:'Screen readers help blind users navigate headings, buttons and content.'},
+    {id:'rootkit', rarity:'rare', icon:'ROOT', title:'Rootkit Burrower', section:'B', power:'Hides deep and acts like it owns the machine.', tip:'Rootkits try to gain hidden administrator/root access.'},
+    {id:'pen-test', rarity:'rare', icon:'PEN', title:'White Hat Pass', section:'B', power:'Breaks in legally, then writes it up professionally.', tip:'Pen testing is authorised testing used to find weaknesses.'},
+    {id:'storage-limit', rarity:'rare', icon:'TIME', title:'Storage Limitation Hourglass', section:'C', power:'Deletes data before it becomes ancient cursed paperwork.', tip:'Storage limitation means data should not be kept longer than needed.'},
+    {id:'flow-arrow', rarity:'rare', icon:'FLOW', title:'Labelled Arrow Dash', section:'D', power:'Points the data in the right direction.', tip:'DFD and IFD arrows should be labelled with the information/data moving.'},
+    {id:'cloud-hydra', rarity:'epic', icon:'HYDRA', title:'Cloud Hydra Scale Form', section:'A', power:'More heads appear when demand spikes.', tip:'Cloud scalability lets resources increase or decrease with demand.'},
+    {id:'mitm', rarity:'epic', icon:'MITM', title:'Man-in-the-Middle Phantom', section:'B', power:'Hides between sender and receiver.', tip:'MITM attacks intercept communications, especially on insecure networks.'},
+    {id:'law-trio', rarity:'epic', icon:'LAW', title:'Legislation Triad', section:'C', power:'GDPR, Copyright and Computer Misuse in one angry card.', tip:'Match the scenario to the law before writing the answer.'},
+    {id:'flow-diamond', rarity:'epic', icon:'DIA', title:'Decision Diamond', section:'D', power:'Splits reality into Yes and No.', tip:'Flowchart diamonds show decisions with branches.'},
+    {id:'world-team', rarity:'epic', icon:'GLOB', title:'World Team Warp Gate', section:'A', power:'Pulls talent from any timezone, for better and worse.', tip:'World teams can access global expertise but need good communication and scheduling.'},
+    {id:'ddos', rarity:'epic', icon:'DDOS', title:'DDoS Meteor Shower', section:'B', power:'Too many requests, not enough server sanity.', tip:'DDoS attacks overwhelm services using traffic from many devices.'},
+    {id:'patent', rarity:'epic', icon:'PAT', title:'Patent Blueprint', section:'C', power:'Protects inventions from copycat nonsense.', tip:'Patents protect inventions, usually for a limited period.'},
+    {id:'dataflow', rarity:'epic', icon:'DFD', title:'DFD Reactor Core', section:'D', power:'Processes, stores, entities and flows all behaving.', tip:'A valid DFD shows inputs, processing, storage and outputs through labelled data flows.'},
+    {id:'malware-king', rarity:'legendary', icon:'KING', title:'Malware Overlord Crown', section:'B', power:'Knows virus, worm, trojan, spyware and rootkit by smell.', tip:'Name the malware type and its behaviour for full marks.'},
+    {id:'examiner', rarity:'legendary', icon:'AO4', title:'AO4 Examiner Lens', section:'All', power:'Adds judgement instead of waffle.', tip:'For discuss/evaluate, balance points and finish with a justified conclusion.'},
+    {id:'backup-phoenix', rarity:'legendary', icon:'PHNX', title:'Backup Phoenix', section:'B', power:'Restores the system from ashes, preferably off-site.', tip:'Disaster recovery relies on clean backups, alternative provision and tested restore steps.'},
+    {id:'gdpr-judge', rarity:'legendary', icon:'JUDGE', title:'GDPR Judge Final Form', section:'C', power:'Sentences bad data practice to immediate deletion.', tip:'Use GDPR principles plus lawful basis when explaining data handling.'},
+    {id:'diagram-master', rarity:'legendary', icon:'DIAG', title:'Diagram Machine Core', section:'D', power:'Turns waffle into symbols and arrows.', tip:'Choose notation based on purpose: flowchart for logic, DFD for data movement, system diagram for components.'}
+  ];
+  function rarityColor(r){ return rarityMeta[r]?.color || '#94a3b8'; }
+  function ownedCounts(){ return economy().collection.reduce((m,id)=>(m[id]=(m[id]||0)+1,m),{}); }
+  function pickRarity(weights){ const entries=Object.entries(weights), total=entries.reduce((n,[,w])=>n+w,0); let roll=Math.random()*total; for(const [r,w] of entries){ roll-=w; if(roll<=0) return r; } return entries[0][0]; }
+  function pullCard(rarity, pending=[]){
+    const counts=ownedCounts();
+    const pool=revisionLoot.filter(c=>c.rarity===rarity);
+    const fresh=pool.filter(c=>!counts[c.id] && !pending.includes(c.id));
+    const choices=fresh.length ? fresh : pool.filter(c=>!pending.includes(c.id));
+    const finalPool=choices.length ? choices : pool;
+    return finalPool[Math.floor(Math.random()*finalPool.length)] || revisionLoot[0];
+  }
+  function buyLootPack(key){
+    const pack=lootPacks[key], eco=economy();
+    if(!pack || eco.coins<pack.cost) return;
+    eco.coins-=pack.cost;
+    const drops=[];
+    for(let i=0;i<pack.count;i++) drops.push(pullCard(pickRarity(pack.weights), drops.map(c=>c.id)));
+    drops.forEach(c=>eco.collection.push(c.id));
+    eco.lastDrop={pack:key, cards:drops.map(c=>c.id)};
+    renderStats();
+    renderModal();
+  }
+  function renderRevisionCard(card, count=1){
+    const meta=rarityMeta[card.rarity];
+    return `<div class="revision-card" style="--rarity:${meta.color}"><span class="rarity">${meta.label} · ${card.section}</span><div class="card-icon">${card.icon}</div><h4>${card.title}</h4><p>${card.power}</p><div class="info" style="margin:0">${card.tip}</div>${count>1?`<div class="dupes">x${count} owned</div>`:''}</div>`;
+  }
+  function renderLootStore(){
+    const eco=economy();
+    const reveal=eco.lastDrop?.cards?.length ? `<div class="drop-reveal" style="--rarity:${rarityColor(revisionLoot.find(c=>c.id===eco.lastDrop.cards[0])?.rarity)}"><div class="wow-title">Latest drop</div><div class="binder-grid">${eco.lastDrop.cards.map(id=>renderRevisionCard(revisionLoot.find(c=>c.id===id))).join('')}</div></div>` : '';
+    return `<div class="loot-balance"><div><div class="zoo-prompt">Wallet</div><strong>${eco.coins} coins</strong></div><button class="action secondary" onclick="Hub.open('COLLECTION')">Open binder</button></div>${reveal}<div class="pack-grid">${Object.entries(lootPacks).map(([key,p])=>`<div class="pack-card" style="--pack:${p.style}"><div class="pack-art">${p.icon}</div><h4>${p.name}</h4><p>${p.desc}</p><button class="action primary" ${eco.coins<p.cost?'disabled style="opacity:.45"':''} onclick="Hub.buyLootPack('${key}')">Buy · ${p.cost} coins</button></div>`).join('')}</div><div class="info">Earn coins from first-time correct quiz answers and by finishing activities. Each activity pays once, so resetting is for practice, not coin farming.</div>`;
+  }
+  function renderLootCollection(){
+    const counts=ownedCounts();
+    const owned=revisionLoot.filter(c=>counts[c.id]);
+    const missing=revisionLoot.length-owned.length;
+    return `<div class="loot-balance"><div><div class="zoo-prompt">Collection</div><strong>${owned.length}/${revisionLoot.length} unique</strong></div><div class="boss-chip">${missing} still hidden</div></div>${owned.length?`<div class="binder-grid">${owned.sort((a,b)=>Object.keys(rarityMeta).indexOf(b.rarity)-Object.keys(rarityMeta).indexOf(a.rarity)).map(c=>renderRevisionCard(c,counts[c.id])).join('')}</div>`:`<div class="scorebox"><div class="emoji">?</div><strong>No drops yet</strong><p style="color:var(--muted);font-family:Space Mono,monospace;font-size:.78rem;margin-bottom:14px">Earn coins, hit the store, then come back to flex the binder.</p><button class="action primary" onclick="Hub.open('STORE')">Go to store</button></div>`}`;
+  }
+
+  window.Hub = { open:openTopic, close:closeModal, tab:switchTab, answerQuiz, resetQuiz, resetActivity, buyLootPack, gapSelect, gapPlace, gapCheck, impactAnswer, nextImpact, classify, sequence, scenarioAnswer, nextScenario, specialAnswer, cloudRescuePick, videoVaultPick, playVideo, accessAnswer, accessNext, studioSelect, studioFix, studioContinue, malwareZooAnswer, malwareZooNext, impactChainToggle, impactChainClear, impactChainCheck, impactChainNext, courtSelect, courtCheck, courtNext, shopToggle, shopCheck, ipSelect, ipCheck, ipNext, storyAnswer, storyNext, tablePick, tableCheck, tableNext, annoPick, annoCheck, annoNext, phishFlag, phishSubmit, passwordUpdate, linearAnswer, nextLinear, bossBattleStart, bossBattleAnswer, bossBattleContinue, bossBattleMenu, bossBattleReset, startSpeed, setSpeedSection, speedAnswer, restartSpeed, speedMenu, setFlashSection, flipFlash, nextFlash, prevFlash, randomFlash };
   $('#overlay').addEventListener('click', e => { if(e.target.id === 'overlay') closeModal(); });
   document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
   load(); renderHome();
