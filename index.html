@@ -560,6 +560,7 @@
   const shuffle = arr => arr.map(v => [Math.random(), v]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]);
   const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const js = v => JSON.stringify(String(v));
+  const attrJs = v => esc(js(v));
   const topicList = () => Object.values(DATA.topics);
   const quizTopics = () => Object.entries(DATA.topics).filter(([,t]) => t.quiz);
   function save(){ try { localStorage.setItem(LS, JSON.stringify({ quiz: state.quiz, activity: state.activity })); } catch {} }
@@ -654,7 +655,7 @@
     let text = a.text; a.answers.forEach((_, i) => { const w = st.slots[i]; const ok = st.checked && w === a.answers[i]; const bad = st.checked && w && w !== a.answers[i]; text = text.replace(`[${i}]`, `<button class="mini-btn ${ok?'option correct':bad?'option wrong':''}" onclick="Hub.gapPlace('${id}',${i})">${w || '_______'}</button>`); });
     const filled = st.slots.filter(Boolean).length;
     const score = st.checked ? st.slots.filter((w,i)=>w===a.answers[i]).length : 0;
-    return `<div class="info">Select a word from the bank, then click a blank to place it.</div><div class="activity-card" style="line-height:2.6;color:var(--soft)">${text}</div><div class="row">${st.bank.map(w => `<button class="mini-btn ${st.held===w?'option reveal':''}" ${st.slots.includes(w)?'disabled style="opacity:.35;text-decoration:line-through"':''} onclick="Hub.gapSelect('${id}',${js(w)})">${w}</button>`).join('')}</div><div class="row" style="margin-top:12px"><button class="action primary" ${filled<a.answers.length?'disabled style="opacity:.5"':''} onclick="Hub.gapCheck('${id}')">Check Answers</button><button class="action secondary" onclick="Hub.resetActivity('${id}')">Reset</button></div>${st.checked?`<div class="feedback show ${score===a.answers.length?'ok':'no'}">Score: ${score}/${a.answers.length}</div>`:''}`;
+    return `<div class="info">Select a word from the bank, then click a blank to place it.</div><div class="activity-card" style="line-height:2.6;color:var(--soft)">${text}</div><div class="row">${st.bank.map(w => `<button class="mini-btn ${st.held===w?'option reveal':''}" ${st.slots.includes(w)?'disabled style="opacity:.35;text-decoration:line-through"':''} onclick="Hub.gapSelect('${id}',${attrJs(w)})">${w}</button>`).join('')}</div><div class="row" style="margin-top:12px"><button class="action primary" ${filled<a.answers.length?'disabled style="opacity:.5"':''} onclick="Hub.gapCheck('${id}')">Check Answers</button><button class="action secondary" onclick="Hub.resetActivity('${id}')">Reset</button></div>${st.checked?`<div class="feedback show ${score===a.answers.length?'ok':'no'}">Score: ${score}/${a.answers.length}</div>`:''}`;
   }
   function gapSelect(id,w){ const st=state.activity[id]; if(!st.checked) st.held = st.held===w?null:w; renderModal(); }
   function gapPlace(id,i){ const st=state.activity[id]; if(st.checked) return; if(st.held){ st.slots[i]=st.held; st.held=null; } else st.slots[i]=''; renderModal(); }
@@ -697,7 +698,7 @@
     if (st.i >= a.items.length) return finalScore(st.score, a.items.length, () => `Hub.resetActivity('${id}')`);
     const item = a.items[st.i];
     if(st.fb) return `<div class="info">${a.prompt}</div><div class="progress"><div style="width:${((st.i+1)/a.items.length)*100}%"></div></div><div class="activity-card"><div class="question">${item[0]}</div><div class="feedback show ${st.fb.ok?'ok':'no'}">${st.fb.ok?'✓ Correct!':'✗ Answer: '+item[1]}</div><button class="action primary" onclick="Hub.nextScenario('${id}')">${st.i+1<a.items.length?'Next':'See Score'} →</button></div>`;
-    return `<div class="info">${a.prompt}</div><div class="progress"><div style="width:${(st.i/a.items.length)*100}%"></div></div><div class="activity-card"><div class="question">${item[0]}</div><div class="match-grid">${item[2].map(opt=>`<button class="option" onclick="Hub.scenarioAnswer('${id}',${js(opt)})">${opt}</button>`).join('')}</div></div>`;
+    return `<div class="info">${a.prompt}</div><div class="progress"><div style="width:${(st.i/a.items.length)*100}%"></div></div><div class="activity-card"><div class="question">${item[0]}</div><div class="match-grid">${item[2].map(opt=>`<button class="option" onclick="Hub.scenarioAnswer('${id}',${attrJs(opt)})">${opt}</button>`).join('')}</div></div>`;
   }
   function scenarioAnswer(id,opt){ const st=state.activity[id], item=DATA.topics[id].activity.items[st.i]; const ok=opt===item[1]; if(ok) st.score++; st.fb={ok}; renderModal(); }
   function nextScenario(id){ const st=state.activity[id]; st.i++; st.fb=null; renderModal(); }
@@ -835,7 +836,7 @@
     if(st.fb){
       return `<div class="info">Match each student to the accessibility feature that helps them most. Profiles appear in a random order each time.</div><div class="progress"><div style="width:${Math.round(((st.i+1)/accessProfiles.length)*100)}%"></div></div><div class="activity-card"><div class="question"><span style="font-size:1.6rem;margin-right:8px">${p[3]}</span>${p[0]}</div><div class="feedback show ${st.fb.ok?'ok':'no'}">${st.fb.ok?'✓ Correct!':'✗ Best match: '+p[1]}<br>${p[2]}</div><button class="action primary" onclick="Hub.accessNext()">${st.i+1<accessProfiles.length?'Next profile':'See Score'} →</button></div>`;
     }
-    return `<div class="info">Choose the accessibility feature that would help this learner most. All six options stay available throughout, so read the profile carefully.</div><div class="progress"><div style="width:${pct}%"></div></div><div class="activity-card"><div style="font-family:Space Mono,monospace;font-size:.68rem;color:var(--muted);margin-bottom:8px">Profile ${st.i+1} of ${accessProfiles.length} · Score: ${st.score}</div><div class="question"><span style="font-size:1.7rem;margin-right:8px">${p[3]}</span>${p[0]}</div><div class="match-grid">${st.featureOrder.map(f=>`<button class="option" onclick="Hub.accessAnswer(${js(f)})">${f}</button>`).join('')}</div></div><div class="activity-card" style="background:rgba(255,255,255,.025)"><strong style="font-size:.8rem">Feature bank</strong><p style="margin-top:6px;color:var(--muted);font-family:Space Mono,monospace;font-size:.7rem;line-height:1.6">${st.featureOrder.join(' · ')}</p></div>`;
+    return `<div class="info">Choose the accessibility feature that would help this learner most. All six options stay available throughout, so read the profile carefully.</div><div class="progress"><div style="width:${pct}%"></div></div><div class="activity-card"><div style="font-family:Space Mono,monospace;font-size:.68rem;color:var(--muted);margin-bottom:8px">Profile ${st.i+1} of ${accessProfiles.length} · Score: ${st.score}</div><div class="question"><span style="font-size:1.7rem;margin-right:8px">${p[3]}</span>${p[0]}</div><div class="match-grid">${st.featureOrder.map(f=>`<button class="option" onclick="Hub.accessAnswer(${attrJs(f)})">${f}</button>`).join('')}</div></div><div class="activity-card" style="background:rgba(255,255,255,.025)"><strong style="font-size:.8rem">Feature bank</strong><p style="margin-top:6px;color:var(--muted);font-family:Space Mono,monospace;font-size:.7rem;line-height:1.6">${st.featureOrder.join(' · ')}</p></div>`;
   }
   function accessAnswer(feature){
     const st=state.activity.ACCESSMATCH;
@@ -980,7 +981,7 @@
         <div class="zoo-prompt">Studio progress · ${fixedCount}/${studioIssues.length} fixed</div>
         ${selectedIssue ? `<div class="question">${selectedIssue.label}. ${selectedIssue.title}</div><p style="color:var(--muted);font-size:.82rem;line-height:1.6;margin-bottom:10px">${selectedIssue.prompt}</p>` : `<div class="question">Select a hotspot on the mock interface</div><p style="color:var(--muted);font-size:.82rem;line-height:1.6;margin-bottom:10px">Look for barriers linked to visual, hearing, motor and cognitive accessibility.</p>`}
         ${st.fb ? `<div class="feedback show ${st.fb.ok?'ok':'no'}">${st.fb.ok?'✓ Fix applied!':'✗ Better fix: '+st.fb.correct}<br>${st.fb.why}</div>` : ''}
-      ${selectedIssue && !st.fixed[selectedIssue.id] && !st.fb ? `<div class="studio-fix-list">${st.fixOrder.map(f=>`<button class="option" onclick="Hub.studioFix(${js(f)})">${f}</button>`).join('')}</div>` : ''}
+      ${selectedIssue && !st.fixed[selectedIssue.id] && !st.fb ? `<div class="studio-fix-list">${st.fixOrder.map(f=>`<button class="option" onclick="Hub.studioFix(${attrJs(f)})">${f}</button>`).join('')}</div>` : ''}
         ${st.fb ? `<button class="action primary" style="margin-top:10px" onclick="Hub.studioContinue()">Continue audit →</button>` : ''}
         <button class="action secondary" style="margin-top:10px" onclick="Hub.resetActivity('ACCESSSTUDIO')">Reset studio</button>
       </div>
@@ -1050,7 +1051,7 @@
     if(st.fb){
       return malwareZooFrame(`<div class="progress"><div style="width:${Math.round(((st.i+1)/malwareZooItems.length)*100)}%"></div></div><div class="activity-card"><div class="zoo-prompt">Enclosure ${st.i+1} of ${malwareZooItems.length} · Score: ${st.score}</div><div class="question"><span style="font-size:1.55rem;margin-right:8px">${item[3]}</span>${item[0]}</div><div class="feedback show ${st.fb.ok?'ok':'no'}">${st.fb.ok?'✓ Correct!':'✗ Best match: '+item[1]}<br>${item[2]}</div><button class="action primary" onclick="Hub.malwareZooNext()">${st.i+1<malwareZooItems.length?'Next enclosure':'See score'} →</button></div>`);
     }
-    return malwareZooFrame(`<div class="info">Welcome to the Malware Zoo. Match each digital beast to its behaviour.</div><div class="progress"><div style="width:${pct}%"></div></div><div class="activity-card"><div class="zoo-prompt">Enclosure ${st.i+1} of ${malwareZooItems.length} · Score: ${st.score}</div><div class="question"><span style="font-size:1.55rem;margin-right:8px">${item[3]}</span>${item[0]}</div><div class="match-grid">${st.optOrder.map(o=>`<button class="option" onclick="Hub.malwareZooAnswer(${js(o)})">${o}</button>`).join('')}</div></div>`);
+    return malwareZooFrame(`<div class="info">Welcome to the Malware Zoo. Match each digital beast to its behaviour.</div><div class="progress"><div style="width:${pct}%"></div></div><div class="activity-card"><div class="zoo-prompt">Enclosure ${st.i+1} of ${malwareZooItems.length} · Score: ${st.score}</div><div class="question"><span style="font-size:1.55rem;margin-right:8px">${item[3]}</span>${item[0]}</div><div class="match-grid">${st.optOrder.map(o=>`<button class="option" onclick="Hub.malwareZooAnswer(${attrJs(o)})">${o}</button>`).join('')}</div></div>`);
   }
   function malwareZooAnswer(opt){
     const st=state.activity.MALZOO;
@@ -1167,7 +1168,7 @@
       <div class="activity-card">
         <div class="zoo-prompt">Breach ${st.i+1} of ${breachImpactItems.length} · Score: ${st.score}</div>
         <div class="question">💥 ${item.scenario}</div>
-          <div class="match-grid">${st.optOrder.map(o=>`<button class="option ${selectedSet.has(o)?'reveal':''}" onclick="Hub.impactChainToggle(${js(o)})">${selectedSet.has(o)?'✓ ':''}${o}</button>`).join('')}</div>
+          <div class="match-grid">${st.optOrder.map(o=>`<button class="option ${selectedSet.has(o)?'reveal':''}" onclick="Hub.impactChainToggle(${attrJs(o)})">${selectedSet.has(o)?'✓ ':''}${o}</button>`).join('')}</div>
         <div class="row" style="margin-top:12px">
           <button class="action primary" ${!st.selected.length?'disabled style="opacity:.5"':''} onclick="Hub.impactChainCheck()">Check selected impacts</button>
           <button class="action secondary" onclick="Hub.impactChainClear()">Clear</button>
@@ -1218,7 +1219,7 @@
     ['Dismissed employee uses old credentials to delete company files.','Computer Misuse Act','Unauthorised access and modification.']
   ];
   function renderMatchLeg(){ return renderLinearGame('MATCHLEG', 'Which law does this scenario primarily violate?', legItems, ['UK GDPR','Computer Misuse Act','Copyright Law']); }
-  function renderLinearGame(id,prompt,items,opts){ const st=ensureAct(id,()=>({i:0,score:0,fb:null})); if(st.i>=items.length) return finalScore(st.score,items.length,()=>`Hub.resetActivity('${id}')`); const it=items[st.i]; if(st.fb) return `<div class="info">${prompt}</div><div class="activity-card"><div class="question">${it[0]}</div><div class="feedback show ${st.fb.ok?'ok':'no'}">${st.fb.ok?'✓ Correct!':'✗ Answer: '+it[1]}<br>${it[2]||''}</div><button class="action primary" onclick="Hub.nextLinear('${id}')">${st.i+1<items.length?'Next':'See Score'} →</button></div>`; return `<div class="info">${prompt}</div><div class="progress"><div style="width:${(st.i/items.length)*100}%"></div></div><div class="activity-card"><div class="question">${it[0]}</div><div class="match-grid">${opts.map(o=>`<button class="option" onclick="Hub.linearAnswer('${id}',${js(o)})">${o}</button>`).join('')}</div></div>`; }
+  function renderLinearGame(id,prompt,items,opts){ const st=ensureAct(id,()=>({i:0,score:0,fb:null})); if(st.i>=items.length) return finalScore(st.score,items.length,()=>`Hub.resetActivity('${id}')`); const it=items[st.i]; if(st.fb) return `<div class="info">${prompt}</div><div class="activity-card"><div class="question">${it[0]}</div><div class="feedback show ${st.fb.ok?'ok':'no'}">${st.fb.ok?'✓ Correct!':'✗ Answer: '+it[1]}<br>${it[2]||''}</div><button class="action primary" onclick="Hub.nextLinear('${id}')">${st.i+1<items.length?'Next':'See Score'} →</button></div>`; return `<div class="info">${prompt}</div><div class="progress"><div style="width:${(st.i/items.length)*100}%"></div></div><div class="activity-card"><div class="question">${it[0]}</div><div class="match-grid">${opts.map(o=>`<button class="option" onclick="Hub.linearAnswer('${id}',${attrJs(o)})">${o}</button>`).join('')}</div></div>`; }
   function linearAnswer(id,opt){ const items = id==='MATCHLEG'?legItems:diagQs; const st=state.activity[id]; const ok=opt===items[st.i][1]; if(ok) st.score++; st.fb={ok}; renderModal(); }
   function nextLinear(id){ const st=state.activity[id]; st.i++; st.fb=null; renderModal(); }
 
@@ -1303,11 +1304,11 @@
         <h4>Your ruling</h4>
         <div class="choice-stack">
           <div class="zoo-prompt">1. Verdict</div>
-          <div class="match-grid">${['Guilty','Not Guilty'].map(v=>`<button class="option ${st.choices.verdict===v?'selected':''}" onclick="Hub.courtSelect('verdict',${js(v)})">${v}</button>`).join('')}</div>
+          <div class="match-grid">${['Guilty','Not Guilty'].map(v=>`<button class="option ${st.choices.verdict===v?'selected':''}" onclick="Hub.courtSelect('verdict',${attrJs(v)})">${v}</button>`).join('')}</div>
           <div class="zoo-prompt">2. GDPR principle</div>
-          <div class="match-grid">${courtPrinciples.map(p=>`<button class="option ${st.choices.principle===p?'selected':''}" onclick="Hub.courtSelect('principle',${js(p)})">${p}</button>`).join('')}</div>
+          <div class="match-grid">${courtPrinciples.map(p=>`<button class="option ${st.choices.principle===p?'selected':''}" onclick="Hub.courtSelect('principle',${attrJs(p)})">${p}</button>`).join('')}</div>
           <div class="zoo-prompt">3. Remedy</div>
-          <div class="choice-stack">${c.fixes.map(f=>`<button class="option ${st.choices.fix===f?'selected':''}" onclick="Hub.courtSelect('fix',${js(f)})">${f}</button>`).join('')}</div>
+          <div class="choice-stack">${c.fixes.map(f=>`<button class="option ${st.choices.fix===f?'selected':''}" onclick="Hub.courtSelect('fix',${attrJs(f)})">${f}</button>`).join('')}</div>
           <button class="action primary" ${(st.choices.verdict&&st.choices.principle&&st.choices.fix)?'':'disabled style="opacity:.5"'} onclick="Hub.courtCheck()">Submit ruling</button>
         </div>
       </div>
@@ -1404,7 +1405,7 @@
     return `<div class="wow-panel"><div class="wow-title">🎨 IP Licence Lab</div><div class="wow-sub">You are publishing a school website. Decide which assets can be used legally and what permission is needed.</div></div><div class="progress"><div style="width:${Math.round((st.i/ipAssets.length)*100)}%"></div></div>
     <div class="activity-card">
       <div class="asset-preview"><div class="asset-icon">${a.icon}</div><div><div class="zoo-prompt">Asset ${st.i+1} of ${ipAssets.length} · Score: ${st.score}</div><div class="question">${a.title}</div><p style="color:var(--muted);font-size:.82rem;line-height:1.5">${a.desc}</p></div></div>
-      <div class="match-grid" style="margin-top:12px">${a.choices.map(c=>`<button class="option ${st.choice===c?'selected':''}" onclick="Hub.ipSelect(${js(c)})">${c}</button>`).join('')}</div>
+      <div class="match-grid" style="margin-top:12px">${a.choices.map(c=>`<button class="option ${st.choice===c?'selected':''}" onclick="Hub.ipSelect(${attrJs(c)})">${c}</button>`).join('')}</div>
       <div class="row" style="margin-top:12px"><button class="action primary" ${st.choice?'':'disabled style="opacity:.5"'} onclick="Hub.ipCheck()">Add decision to media pack</button></div>
     </div>`;
   }
@@ -1479,7 +1480,7 @@
     <div class="progress"><div style="width:${pct}%"></div></div>
     <div class="wow-grid">
       <div class="wow-card"><h4>${c.title}</h4><p style="color:var(--soft);font-size:.9rem;line-height:1.6">${c.story}</p><div class="evidence" style="margin-top:10px">${c.highlights.map(h=>`<span class="chip">🔎 ${h}</span>`).join('')}</div></div>
-      <div class="wow-card"><h4>Blueprint Step ${st.pi+1}/4 · ${p[0]}</h4><div class="question">${p[1]}</div><div class="match-grid">${p[3].map(o=>`<button class="option" onclick="Hub.storyAnswer(${js(o)})">${o}</button>`).join('')}</div></div>
+      <div class="wow-card"><h4>Blueprint Step ${st.pi+1}/4 · ${p[0]}</h4><div class="question">${p[1]}</div><div class="match-grid">${p[3].map(o=>`<button class="option" onclick="Hub.storyAnswer(${attrJs(o)})">${o}</button>`).join('')}</div></div>
     </div>`;
   }
   function storyAnswer(ans){ const st=state.activity.STORYDIAG; if(!st || st.fb) return; const c=storyDiagCases[st.order[st.ci]], p=c.prompts[st.pi]; const ok=ans===p[2]; if(ok) st.score++; st.fb={ok}; renderModal(); }
@@ -1511,7 +1512,7 @@
     return `<div class="blueprint"><div class="wow-title">🔁 Table-to-Flowchart Transformer</div><div class="wow-sub">Feed the table into the transformer by choosing the correct flowchart symbol for each row.</div></div>
     <div class="activity-card"><div class="zoo-prompt">Transformer job ${st.ci+1}/${tableFlowCases.length}</div><div class="question">${c.title}</div>
       <div style="overflow-x:auto"><table class="table-flow"><thead><tr><th>Step</th><th>Table action</th><th>Choose symbol</th></tr></thead><tbody>
-      ${c.rows.map((r,i)=>`<tr><td>${r[0]}</td><td>${r[1]}${st.checked?`<div style="font-family:Space Mono,monospace;font-size:.66rem;color:${st.picks[i]===r[2]?'#86efac':'#fca5a5'};margin-top:5px">${st.picks[i]===r[2]?'✓':'✗'} ${r[3]}</div>`:''}</td><td>${flowShapes.map(s=>{const sel=st.picks[i]===s; const cls=st.checked?(s===r[2]?'good':sel?'bad':''):sel?'selected':''; return `<button class="shape-pill ${cls}" ${st.checked?'disabled':''} onclick="Hub.tablePick(${i},${js(s)})">${s}</button>`;}).join('')}</td></tr>`).join('')}
+      ${c.rows.map((r,i)=>`<tr><td>${r[0]}</td><td>${r[1]}${st.checked?`<div style="font-family:Space Mono,monospace;font-size:.66rem;color:${st.picks[i]===r[2]?'#86efac':'#fca5a5'};margin-top:5px">${st.picks[i]===r[2]?'✓':'✗'} ${r[3]}</div>`:''}</td><td>${flowShapes.map(s=>{const sel=st.picks[i]===s; const cls=st.checked?(s===r[2]?'good':sel?'bad':''):sel?'selected':''; return `<button class="shape-pill ${cls}" ${st.checked?'disabled':''} onclick="Hub.tablePick(${i},${attrJs(s)})">${s}</button>`;}).join('')}</td></tr>`).join('')}
       </tbody></table></div>
       <div class="row" style="margin-top:12px"><button class="action primary" ${Object.keys(st.picks).length<totalRows?'disabled style="opacity:.5"':''} onclick="Hub.tableCheck()">Run transformer</button><button class="action secondary" onclick="Hub.resetActivity('TABLEFLOW')">Reset</button>${st.checked?`<button class="action primary" onclick="Hub.tableNext()">${st.ci+1<tableFlowCases.length?'Next table':'See score'} →</button>`:''}</div>
       ${st.checked?`<div class="feedback show ${score===totalRows?'ok':'no'}">Transformer score: ${score}/${totalRows}</div>`:''}
